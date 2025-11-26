@@ -2,7 +2,7 @@
 
 ![Preview](public/preview.png)
 
-A modern, interactive digital invitation website that can be customized for any event - weddings, corporate gatherings, birthdays, anniversaries, and more. Built with Vite (React), Tailwind CSS, and Framer Motion.
+A modern, interactive digital invitation website that can be customized for any event - weddings, corporate gatherings, birthdays, anniversaries, and more. Built with Vite (React), Tailwind CSS, and Framer Motion. Deployed with Docker using Node.js serve package.
 
 Based on the original template by [@mrofisr](https://github.com/mrofisr).
 

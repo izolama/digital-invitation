@@ -2,6 +2,8 @@
 
 Fast deployment guide for getting your Digital Invitation up and running.
 
+**Stack:** Docker + Node.js 20 + serve package (no Nginx required)
+
 ## 🚀 One-Line Deploy
 
 ```bash
@@ -78,9 +80,9 @@ docker-compose down
 docker-compose logs -f
 ```
 
-### Check Health
+### Check Application
 ```bash
-curl http://localhost:5173/health
+curl http://localhost:5173/
 ```
 
 ---

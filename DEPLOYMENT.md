@@ -2,6 +2,8 @@
 
 Complete guide for deploying Digital Invitation using Docker and Docker Compose.
 
+**Tech Stack:** Node.js 20 Alpine + `serve` package for serving static files (no Nginx required).
+
 ## 📋 Prerequisites
 
 - Docker (version 20.10 or higher)
@@ -141,8 +143,8 @@ docker inspect digital-invitation-app
 The application includes built-in health checks:
 
 ```bash
-# Check application health
-curl http://localhost:5173/health
+# Check application (root endpoint)
+curl http://localhost:5173/
 
 # Check with Docker
 docker inspect --format='{{.State.Health.Status}}' digital-invitation-app
@@ -300,15 +302,16 @@ yourdomain.com {
 ## 📈 Performance Optimization
 
 ### Image Size Optimization
-- Current image size: ~50MB (with Alpine Linux)
+- Current image size: ~150MB (Node.js 20 Alpine + serve package)
 - Multi-stage build reduces final image size
-- Only production dependencies included
+- Only production built files included
 
-### Nginx Optimizations
-- Gzip compression enabled
-- Static asset caching (1 year for immutable assets)
-- HTTP/2 support (when using HTTPS)
-- Security headers configured
+### Serve Package Features
+- Single Page Application (SPA) support with `-s` flag
+- Automatic routing for React Router
+- Compression enabled by default
+- Fast and lightweight alternative to Nginx
+- No additional configuration needed
 
 ### Resource Limits (Optional)
 Add to `docker-compose.yml`:
