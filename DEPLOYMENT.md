@@ -30,7 +30,7 @@ docker-compose up -d
 ```
 
 2. **Access the application:**
-- Open your browser and navigate to `http://localhost:8080`
+- Open your browser and navigate to `http://localhost:5173`
 
 3. **View logs:**
 ```bash
@@ -142,7 +142,7 @@ The application includes built-in health checks:
 
 ```bash
 # Check application health
-curl http://localhost:8080/health
+curl http://localhost:5173/health
 
 # Check with Docker
 docker inspect --format='{{.State.Health.Status}}' digital-invitation-app
@@ -177,7 +177,7 @@ make init-network
 docker-compose logs digital-invitation
 
 # Check if port is already in use
-sudo netstat -tlnp | grep :8080
+sudo netstat -tlnp | grep :5173
 
 # Remove and recreate
 docker-compose down -v
@@ -205,10 +205,10 @@ sudo chmod 666 /var/run/docker.sock
 ### Port already in use
 ```bash
 # Find what's using the port
-sudo lsof -i :8080
+sudo lsof -i :5173
 
 # Kill the process or change port in docker-compose.yml
-# Change "8080:80" to "8081:80" for example
+# Change "5173:80" to "5174:80" for example
 ```
 
 ## 🌐 Shared Network

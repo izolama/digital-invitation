@@ -261,7 +261,7 @@ docker-compose -f docker-compose.prod.yml up -d
 ```
 
 The application will be available at:
-- Development: `http://localhost:8080`
+- Development: `http://localhost:5173`
 - Production: `http://localhost:80`
 
 📚 **Documentation:**

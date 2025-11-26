@@ -24,7 +24,7 @@ help:
 dev: init-network
 	@echo "Starting development environment..."
 	docker-compose up -d
-	@echo "Application running at http://localhost:8080"
+	@echo "Application running at http://localhost:5173"
 
 # Initialize shared network
 init-network:

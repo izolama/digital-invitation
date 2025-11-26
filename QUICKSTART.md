@@ -9,7 +9,7 @@ Fast deployment guide for getting your Digital Invitation up and running.
 docker network create shared-network 2>/dev/null || true && docker-compose up -d
 ```
 
-That's it! Your application will be available at `http://localhost:8080`
+That's it! Your application will be available at `http://localhost:5173`
 
 ---
 
@@ -49,7 +49,7 @@ docker-compose logs -f
 ```
 
 ### 7. Access Application
-Open your browser: `http://your-server-ip:8080`
+Open your browser: `http://your-server-ip:5173`
 
 ---
 
@@ -80,7 +80,7 @@ docker-compose logs -f
 
 ### Check Health
 ```bash
-curl http://localhost:8080/health
+curl http://localhost:5173/health
 ```
 
 ---
@@ -144,11 +144,11 @@ docker network create shared-network
 ### Port Already in Use
 ```bash
 # Check what's using the port
-sudo lsof -i :8080
+sudo lsof -i :5173
 
 # Or change port in docker-compose.yml
 nano docker-compose.yml
-# Change "8080:80" to another port like "8081:80"
+# Change "5173:80" to another port like "5174:80"
 ```
 
 ### Container Won't Start
