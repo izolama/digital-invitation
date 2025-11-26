@@ -32,12 +32,18 @@ export const AuthProvider = ({ children }) => {
                 throw new Error('Login failed');
             }
 
-            const data = await response.json();
+            const result = await response.json();
+            
+            // Backend returns: { success: true, data: { id, name, email, token } }
+            if (!result.success || !result.data) {
+                throw new Error(result.error || 'Invalid response format');
+            }
+            
             const userData = {
-                id: data.id,
-                email: data.email,
-                name: data.name,
-                token: data.token
+                id: result.data.id,
+                email: result.data.email,
+                name: result.data.name,
+                token: result.data.token
             };
 
             localStorage.setItem('admin_user', JSON.stringify(userData));
@@ -46,20 +52,24 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error('Login error:', error);
             
-            // FOR DEVELOPMENT: Mock login (remove in production)
-            if (email === 'admin@krakatau.com' && password === 'admin123') {
-                const mockUser = {
-                    id: 1,
-                    email: 'admin@krakatau.com',
-                    name: 'Admin',
-                    token: 'mock-token-123'
-                };
-                localStorage.setItem('admin_user', JSON.stringify(mockUser));
-                setUser(mockUser);
-                return { success: true };
+            // Get error message from response if available
+            let errorMessage = error.message || 'Login failed';
+            try {
+                // Try to get error from response
+                const errorData = await fetch(API_ENDPOINTS.ADMIN_LOGIN, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                }).then(r => r.json()).catch(() => null);
+                
+                if (errorData && errorData.error) {
+                    errorMessage = errorData.error;
+                }
+            } catch (e) {
+                // Ignore
             }
             
-            return { success: false, error: error.message };
+            return { success: false, error: errorMessage };
         }
     };
 

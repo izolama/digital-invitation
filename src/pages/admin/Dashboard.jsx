@@ -24,68 +24,70 @@ export default function Dashboard() {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('all');
+    const [backendStats, setBackendStats] = useState(null);
 
     useEffect(() => {
-        fetchRegistrations();
-    }, []);
+        if (user && user.token) {
+            fetchRegistrations();
+        }
+    }, [user, searchTerm, filterStatus]);
 
     const fetchRegistrations = async () => {
         setLoading(true);
         try {
-            const response = await fetch(API_ENDPOINTS.ADMIN_REGISTRATIONS, {
+            // Build query parameters for search and filter
+            const params = new URLSearchParams();
+            if (searchTerm) params.append('search', searchTerm);
+            if (filterStatus && filterStatus !== 'all') params.append('status', filterStatus);
+            params.append('page', '1');
+            params.append('limit', '1000'); // Get all for now, can add pagination later
+            
+            const url = `${API_ENDPOINTS.ADMIN_REGISTRATIONS}${params.toString() ? '?' + params.toString() : ''}`;
+            
+            const response = await fetch(url, {
                 headers: {
                     'Authorization': `Bearer ${user.token}`,
                     'Content-Type': 'application/json'
                 }
             });
 
-            if (!response.ok) throw new Error('Failed to fetch');
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || `HTTP ${response.status}: Failed to fetch`);
+            }
 
-            const data = await response.json();
-            setRegistrations(data);
+            const result = await response.json();
+            
+            // Backend returns: { success: true, data: [...], pagination: {...}, stats: {...} }
+            if (result.success && result.data) {
+                // Map database field names to frontend format
+                const mappedData = result.data.map(reg => ({
+                    id: reg.id,
+                    fullName: reg.full_name,
+                    companyName: reg.company_name,
+                    whatsappNumber: reg.whatsapp_number,
+                    email: reg.email,
+                    foodRestriction: reg.food_restriction,
+                    allergies: reg.allergies,
+                    confirmationAttendance: reg.confirmation_attendance,
+                    numberOfPeople: reg.number_of_people,
+                    createdAt: reg.created_at
+                }));
+                
+                setRegistrations(mappedData);
+                
+                // Store backend stats for accurate statistics
+                if (result.stats) {
+                    setBackendStats(result.stats);
+                }
+            } else {
+                throw new Error('Invalid response format');
+            }
         } catch (error) {
             console.error('Fetch error:', error);
-            
-            // FOR DEVELOPMENT: Mock data
-            const mockData = [
-                {
-                    id: 1,
-                    fullName: 'John Doe',
-                    companyName: 'PT ABC Industries',
-                    whatsappNumber: '08123456789',
-                    email: 'john@abc.com',
-                    foodRestriction: 'NON VEGAN',
-                    allergies: 'NO',
-                    confirmationAttendance: 'YES',
-                    numberOfPeople: 2,
-                    createdAt: '2025-11-26T10:30:00Z'
-                },
-                {
-                    id: 2,
-                    fullName: 'Jane Smith',
-                    companyName: 'PT XYZ Corporation',
-                    whatsappNumber: '08198765432',
-                    email: 'jane@xyz.com',
-                    foodRestriction: 'VEGAN',
-                    allergies: 'YES',
-                    confirmationAttendance: 'YES',
-                    numberOfPeople: 1,
-                    createdAt: '2025-11-26T11:15:00Z'
-                },
-                {
-                    id: 3,
-                    fullName: 'Bob Johnson',
-                    companyName: 'PT Steel Works',
-                    whatsappNumber: '08156789012',
-                    email: 'bob@steel.com',
-                    foodRestriction: 'NO RESTRICTION',
-                    allergies: 'NO',
-                    confirmationAttendance: 'MAYBE',
-                    numberOfPeople: 3,
-                    createdAt: '2025-11-26T12:00:00Z'
-                }
-            ];
-            setRegistrations(mockData);
+            // Show error but don't use mock data in production
+            setRegistrations([]);
+            alert(`Error loading registrations: ${error.message}`);
         }
         setLoading(false);
     };
@@ -108,25 +110,23 @@ export default function Dashboard() {
         }
     };
 
-    const filteredRegistrations = registrations.filter(reg => {
-        const matchesSearch = 
-            reg.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            reg.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            reg.email.toLowerCase().includes(searchTerm.toLowerCase());
-        
-        const matchesFilter = 
-            filterStatus === 'all' || 
-            reg.confirmationAttendance === filterStatus;
+    // Backend already handles search and filter, but we can do additional client-side filtering if needed
+    // For now, use registrations directly since backend handles filtering
+    const filteredRegistrations = registrations;
 
-        return matchesSearch && matchesFilter;
-    });
-
-    const stats = {
+    // Use backend stats if available (more accurate), otherwise calculate from filtered data
+    const stats = backendStats ? {
+        total: backendStats.total || 0,
+        confirmed: backendStats.confirmed || 0,
+        declined: backendStats.declined || 0,
+        maybe: backendStats.maybe || 0,
+        totalGuests: backendStats.totalGuests || 0
+    } : {
         total: registrations.length,
         confirmed: registrations.filter(r => r.confirmationAttendance === 'YES').length,
         declined: registrations.filter(r => r.confirmationAttendance === 'NO').length,
         maybe: registrations.filter(r => r.confirmationAttendance === 'MAYBE').length,
-        totalGuests: registrations.reduce((sum, r) => sum + parseInt(r.numberOfPeople), 0)
+        totalGuests: registrations.reduce((sum, r) => sum + parseInt(r.numberOfPeople || 0), 0)
     };
 
     const exportToCSV = () => {
