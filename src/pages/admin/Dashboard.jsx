@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import config from '@/config/config';
+import { API_ENDPOINTS } from '@/config/api';
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -31,10 +32,10 @@ export default function Dashboard() {
     const fetchRegistrations = async () => {
         setLoading(true);
         try {
-            // TODO: Replace with actual API call
-            const response = await fetch('/api/admin/registrations', {
+            const response = await fetch(API_ENDPOINTS.ADMIN_REGISTRATIONS, {
                 headers: {
-                    'Authorization': `Bearer ${user.token}`
+                    'Authorization': `Bearer ${user.token}`,
+                    'Content-Type': 'application/json'
                 }
             });
 

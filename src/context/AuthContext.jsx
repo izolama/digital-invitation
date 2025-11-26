@@ -17,8 +17,10 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            // TODO: Replace with actual API call
-            const response = await fetch('/api/admin/login', {
+            // Import API endpoint
+            const { API_ENDPOINTS } = await import('@/config/api');
+            
+            const response = await fetch(API_ENDPOINTS.ADMIN_LOGIN, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

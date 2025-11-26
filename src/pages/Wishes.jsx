@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { useState } from 'react';
 import config from '@/config/config';
+import { API_ENDPOINTS } from '@/config/api';
 
 export default function Wishes() {
     const [showConfetti, setShowConfetti] = useState(false);
@@ -42,7 +43,7 @@ export default function Wishes() {
 
         try {
             // Send data to backend API
-            const response = await fetch('/api/registrations', {
+            const response = await fetch(API_ENDPOINTS.REGISTRATIONS, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
