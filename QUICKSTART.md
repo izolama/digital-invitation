@@ -7,11 +7,13 @@ Fast deployment guide for getting your Digital Invitation up and running.
 ## 🚀 One-Line Deploy
 
 ```bash
-# Create network and start application
+# Create network and start full stack
 docker network create shared-network 2>/dev/null || true && docker-compose up -d
 ```
 
-That's it! Your application will be available at `http://localhost:5173`
+That's it! Your application will be available:
+- **Frontend**: `http://localhost:5173`
+- **Backend API**: `http://localhost:5000`
 
 ---
 

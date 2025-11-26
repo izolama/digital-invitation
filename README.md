@@ -59,11 +59,14 @@ Access the admin panel to manage registrations:
 - [Lucide Icons](https://lucide.dev/) - Beautiful icon library
 - [React Confetti](https://www.npmjs.com/package/react-confetti) - Celebration effects
 
-### Backend (Optional)
-- PostgreSQL - Database for storing registrations
-- Node.js + Express - API server
-- JWT - Authentication tokens
-- Bcrypt - Password hashing
+### Backend (Included)
+- **Node.js 20 + Express** - API server
+- **PostgreSQL** - Database for storing registrations
+- **JWT** - Authentication tokens
+- **Bcrypt** - Password hashing
+- **Helmet** - Security headers
+- **CORS** - Cross-origin support
+- **Rate Limiting** - DDoS protection
 
 ## Installation
 
@@ -99,6 +102,28 @@ This will setup database schema on your existing PostgreSQL:
 **Credentials:** `postgres / ShaninHanan23`
 
 See `database/EXISTING_SETUP.md` for detailed guide.
+
+### Backend API Setup
+
+```bash
+cd backend
+npm install
+chmod +x env-setup.sh
+./env-setup.sh
+npm run dev
+```
+
+Backend API will run on `http://localhost:5001`
+
+Features:
+- ✅ RESTful API with Express.js
+- ✅ PostgreSQL integration
+- ✅ JWT authentication
+- ✅ Rate limiting & security
+- ✅ Input validation
+- ✅ Request logging
+
+See `BACKEND_SETUP.md` for detailed guide.
 
 ## Customization
 
@@ -305,7 +330,7 @@ const config = {
 # Create shared network (first time only)
 docker network create shared-network
 
-# Development/Testing
+# Start Full Stack (Frontend + Backend)
 docker-compose up -d
 
 # Production
@@ -313,15 +338,18 @@ docker-compose -f docker-compose.prod.yml up -d
 ```
 
 The application will be available at:
-- Development: `http://localhost:5173`
+- Frontend: `http://localhost:5173`
+- Backend API: `http://localhost:5001`
 - Production: `http://localhost:80`
 
 📚 **Documentation:**
 - 🚀 [QUICKSTART.md](QUICKSTART.md) - Fast deployment guide
 - 📖 [DEPLOYMENT.md](DEPLOYMENT.md) - Complete Docker guide
-- 🔌 [API_DOCUMENTATION.md](API_DOCUMENTATION.md) - Backend API for PostgreSQL
+- 🔌 [API_DOCUMENTATION.md](API_DOCUMENTATION.md) - Complete API specification
+- 🖥️ [BACKEND_SETUP.md](BACKEND_SETUP.md) - Backend API setup guide
 - 🗄️ [database/README.md](database/README.md) - Database setup guide
 - 🗄️ [database/QUICKSTART_DB.md](database/QUICKSTART_DB.md) - Quick database setup
+- 🖥️ [SERVER_SETUP.md](SERVER_SETUP.md) - Server deployment guide
 - SSL/HTTPS setup
 - Production configurations
 - Health checks & monitoring

@@ -26,13 +26,19 @@ chmod +x init-network.sh
 ./init-network.sh
 ```
 
-2. **Build and run the container:**
+2. **Build and run full stack:**
 ```bash
 docker-compose up -d
 ```
 
-2. **Access the application:**
-- Open your browser and navigate to `http://localhost:5173`
+This will start:
+- Frontend (React app) on port 5173
+- Backend API (Express) on port 5001
+
+3. **Access the application:**
+- Frontend: `http://localhost:5173`
+- Backend API: `http://localhost:5001`
+- Health Check: `http://localhost:5001/health`
 
 3. **View logs:**
 ```bash

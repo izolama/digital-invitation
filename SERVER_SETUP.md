@@ -118,8 +118,8 @@ postgresql://postgres:ShaninHanan23@localhost:5432/digital_invitation
 - Admin: `http://server-ip:5173/admin/login`
 
 **Backend API (when setup):**
-- URL: `http://server-ip:5000`
-- Health: `http://server-ip:5000/health`
+- URL: `http://server-ip:5001`
+- Health: `http://server-ip:5001/health`
 
 ---
 
@@ -145,7 +145,7 @@ curl http://localhost:5173
 PGPASSWORD=ShaninHanan23 psql -h localhost -U postgres -d digital_invitation -c "SELECT COUNT(*) FROM registrations;"
 
 # Check backend (when running)
-curl http://localhost:5000/health
+curl http://localhost:5001/health
 
 # View all registrations
 PGPASSWORD=ShaninHanan23 psql -h localhost -U postgres -d digital_invitation -c "SELECT * FROM registrations ORDER BY created_at DESC LIMIT 5;"
