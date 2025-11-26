@@ -9,5 +9,5 @@ echo "Starting containers..."
 docker-compose up -d
 echo "Showing containers..."
 docker ps
-echo "Showing logs..."
-docker logs -f digital-invitation-app
+echo "Showing logs frontend and backend..."
+docker logs -f digital-invitation-frontend digital-invitation-backend
