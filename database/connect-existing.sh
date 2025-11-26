@@ -76,7 +76,12 @@ fi
 # Import schema
 echo ""
 echo "Importing database schema..."
-PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f schema.sql
+
+# Get script directory
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Import schema from script directory
+PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f "$SCRIPT_DIR/schema.sql"
 
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}✓ Schema imported successfully${NC}"
