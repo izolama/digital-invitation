@@ -30,15 +30,15 @@ WORKDIR /app
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 
-# Expose port 80
-EXPOSE 80
+# Expose port 5173
+EXPOSE 5173
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget --quiet --tries=1 --spider http://localhost/ || exit 1
+  CMD wget --quiet --tries=1 --spider http://localhost:5173/ || exit 1
 
 # Serve the application
 # -s flag for single page application support
-# -l 80 to listen on port 80
-CMD ["serve", "-s", "dist", "-l", "80"]
+# -l 5173 to listen on port 5173
+CMD ["serve", "-s", "dist", "-l", "5173"]
 
