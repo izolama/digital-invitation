@@ -70,14 +70,19 @@ CREATE TRIGGER update_registrations_updated_at
     EXECUTE FUNCTION update_updated_at_column();
 
 -- Insert default admin user
--- Password: admin123 (bcrypt hashed)
+-- Password: admin123 (bcrypt hashed, 10 rounds)
 -- IMPORTANT: Change this password in production!
+-- 
+-- To update password, run:
+--   ./update-password-simple.sh
+--   OR
+--   ./update-admin-password.sh [new_password]
 INSERT INTO admin_users (name, email, password_hash) 
 VALUES (
     'Admin', 
     'admin@krakatau.com', 
     '$2b$10$rCx0HwkQF9X3OBmZxmWNy.Mh9UqzGQpZDXX.jL9kXJ4NHJ4K3.hGa'
-);
+) ON CONFLICT (email) DO NOTHING;
 
 -- Insert sample registrations for testing (optional)
 INSERT INTO registrations (
