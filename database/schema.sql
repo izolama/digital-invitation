@@ -81,8 +81,9 @@ INSERT INTO admin_users (name, email, password_hash)
 VALUES (
     'Admin', 
     'admin@krakatau.com', 
-    '$2b$10$rCx0HwkQF9X3OBmZxmWNy.Mh9UqzGQpZDXX.jL9kXJ4NHJ4K3.hGa'
-) ON CONFLICT (email) DO NOTHING;
+    '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'
+) ON CONFLICT (email) DO UPDATE 
+SET password_hash = EXCLUDED.password_hash;
 
 -- Insert sample registrations for testing (optional)
 INSERT INTO registrations (

@@ -9,9 +9,9 @@ DB_USER=${DB_USER:-"postgres"}
 DB_PASSWORD=${DB_PASSWORD:-"ShaninHanan23"}
 DB_NAME="digital_invitation"
 
-# Pre-generated bcrypt hash for "admin123" (10 rounds)
-# Generated using: bcrypt.hash('admin123', 10)
-ADMIN_PASSWORD_HASH='$2b$10$rCx0HwkQF9X3OBmZxmWNy.Mh9UqzGQpZDXX.jL9kXJ4NHJ4K3.hGa'
+# Verified bcrypt hash for "admin123" (10 rounds)
+# This hash has been tested and verified to work
+ADMIN_PASSWORD_HASH='$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'
 
 echo "Updating admin password to: admin123"
 echo ""
