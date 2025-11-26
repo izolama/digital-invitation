@@ -16,10 +16,14 @@
 
 // src/App.jsx
 import { useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Layout from '@/components/Layout';
 import MainContent from '@/pages/MainContent';
 import LandingPage from '@/pages/LandingPage';
+import Login from '@/pages/admin/Login';
+import Dashboard from '@/pages/admin/Dashboard';
+import ProtectedRoute from '@/components/ProtectedRoute';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import config from '@/config/config';
 
@@ -43,6 +47,7 @@ import config from '@/config/config';
  */
 function App() {
   const [isInvitationOpen, setIsInvitationOpen] = useState(false);
+  
   return (
     <HelmetProvider>
       <Helmet>
@@ -73,15 +78,37 @@ function App() {
         <meta name="theme-color" content="#FDA4AF" /> {/* Rose-300 color */}
       </Helmet>
 
-      <AnimatePresence mode='wait'>
-        {!isInvitationOpen ? (
-          <LandingPage onOpenInvitation={() => setIsInvitationOpen(true)} />
-        ) : (
-          <Layout>
-            <MainContent />
-          </Layout>
-        )}
-      </AnimatePresence>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={
+          <AnimatePresence mode='wait'>
+            {!isInvitationOpen ? (
+              <LandingPage onOpenInvitation={() => setIsInvitationOpen(true)} />
+            ) : (
+              <Layout>
+                <MainContent />
+              </Layout>
+            )}
+          </AnimatePresence>
+        } />
+
+        {/* Admin Routes */}
+        <Route path="/admin/login" element={<Login />} />
+        <Route 
+          path="/admin/dashboard" 
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+        
+        {/* Redirect /admin to /admin/login */}
+        <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
+
+        {/* 404 - Redirect to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </HelmetProvider>
   );
 }

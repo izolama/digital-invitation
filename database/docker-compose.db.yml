@@ -1,0 +1,41 @@
+version: '3.8'
+
+# NOTE: This file is for reference only
+# PostgreSQL is already running with existing credentials:
+#   User: postgres
+#   Password: ShaninHanan23
+#   Port: 5432
+
+# Use connect-existing.sh script to setup schema on existing database
+
+  # Optional: pgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: digital-invitation-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@krakatau.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - shared-network
+    depends_on:
+      - postgres
+    labels:
+      - "com.digital-invitation.description=pgAdmin Database Manager"
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  shared-network:
+    external: true
+

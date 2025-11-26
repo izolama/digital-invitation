@@ -40,26 +40,48 @@ export default function Wishes() {
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Simulating API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        try {
+            // Send data to backend API
+            const response = await fetch('/api/registrations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
 
-        console.log('Form submitted:', formData);
-        
-        setIsSubmitting(false);
-        setShowConfetti(true);
-        setTimeout(() => setShowConfetti(false), 3000);
-        
-        // Optional: Reset form
-        // setFormData({
-        //     fullName: '',
-        //     companyName: '',
-        //     whatsappNumber: '',
-        //     email: '',
-        //     foodRestriction: '',
-        //     allergies: '',
-        //     confirmationAttendance: '',
-        //     numberOfPeople: '1'
-        // });
+            if (!response.ok) {
+                throw new Error('Failed to submit registration');
+            }
+
+            const data = await response.json();
+            console.log('Registration successful:', data);
+            
+            // Show success feedback
+            setShowConfetti(true);
+            setTimeout(() => setShowConfetti(false), 3000);
+            
+            // Reset form after successful submission
+            setFormData({
+                fullName: '',
+                companyName: '',
+                whatsappNumber: '',
+                email: '',
+                foodRestriction: '',
+                allergies: '',
+                confirmationAttendance: '',
+                numberOfPeople: '1'
+            });
+
+            // Optional: Show success message to user
+            alert('Thank you for registering! We look forward to seeing you at the event.');
+            
+        } catch (error) {
+            console.error('Submission error:', error);
+            alert('Sorry, there was an error submitting your registration. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
     return (
         <section id="wishes" className="min-h-screen relative overflow-hidden bg-gradient-to-br from-purple-100 via-blue-50 to-purple-50">

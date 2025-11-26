@@ -17,24 +17,57 @@ Based on the original template by [@mrofisr](https://github.com/mrofisr).
 - 🌐 SEO optimized with Open Graph tags
 - ⚡ Lightning-fast performance with Vite
 - 🎯 Easy customization through single config file
+- 📝 **Registration Form** - Professional event registration with dropdown fields
+- 🔐 **Admin Panel** - Secure login and dashboard for managing registrations
+- 📊 **Dashboard Analytics** - View stats, filter, search, and export registrations
+- 🗄️ **Database Ready** - PostgreSQL integration with complete API documentation
 
 ## Use Cases
 This template is perfect for:
 - 💍 Wedding invitations
 - 🎂 Birthday celebrations
 - 🎓 Graduation parties
-- 🏢 Corporate events & gatherings
+- 🏢 Corporate events & gatherings (like Customer Gathering 2025)
 - 🎊 Anniversary celebrations
-- 🎪 Any special event that needs a digital invitation
+- 🎪 Any special event that needs a digital invitation with registration
+
+## Admin Panel
+Access the admin panel to manage registrations:
+- **URL**: `/admin/login`
+- **Demo Credentials**:
+  - Email: `admin@krakatau.com`
+  - Password: `admin123`
+
+**Admin Features:**
+- 📊 Dashboard with statistics (Total, Confirmed, Declined, Maybe, Guests)
+- 👥 View all registrations in table format
+- 🔍 Search by name, company, or email
+- 🗂️ Filter by attendance status (YES/NO/MAYBE)
+- 📥 Export registrations to CSV
+- 🔄 Real-time data refresh
+- 📱 Responsive admin interface
+- 🔐 JWT authentication
+- 🗄️ PostgreSQL database integration
 
 ## Tech Stack
+
+### Frontend
 - [Vite (React)](https://vite.dev/) - Fast build tool and dev server
 - [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
 - [Framer Motion](https://www.framer.com/motion/) - Animation library
+- [React Router DOM](https://reactrouter.com/) - Client-side routing
 - [Lucide Icons](https://lucide.dev/) - Beautiful icon library
 - [React Confetti](https://www.npmjs.com/package/react-confetti) - Celebration effects
 
+### Backend (Optional)
+- PostgreSQL - Database for storing registrations
+- Node.js + Express - API server
+- JWT - Authentication tokens
+- Bcrypt - Password hashing
+
 ## Installation
+
+### Frontend Setup
 1. Clone the repository and install dependencies:
   ```bash
   git clone https://github.com/yourusername/digital-invitation
@@ -47,6 +80,25 @@ This template is perfect for:
   npm run dev
   ```
   Open [http://localhost:5173/](http://localhost:5173/) in your browser.
+
+### Database Setup (PostgreSQL)
+
+**For Existing PostgreSQL:**
+```bash
+cd database
+chmod +x connect-existing.sh
+./connect-existing.sh
+```
+
+This will setup database schema on your existing PostgreSQL:
+- ✅ Create `digital_invitation` database
+- ✅ Import tables schema
+- ✅ Insert admin user
+- ✅ Insert sample data
+
+**Credentials:** `postgres / ShaninHanan23`
+
+See `database/EXISTING_SETUP.md` for detailed guide.
 
 ## Customization
 
@@ -266,7 +318,10 @@ The application will be available at:
 
 📚 **Documentation:**
 - 🚀 [QUICKSTART.md](QUICKSTART.md) - Fast deployment guide
-- 📖 [DEPLOYMENT.md](DEPLOYMENT.md) - Complete Docker guide with:
+- 📖 [DEPLOYMENT.md](DEPLOYMENT.md) - Complete Docker guide
+- 🔌 [API_DOCUMENTATION.md](API_DOCUMENTATION.md) - Backend API for PostgreSQL
+- 🗄️ [database/README.md](database/README.md) - Database setup guide
+- 🗄️ [database/QUICKSTART_DB.md](database/QUICKSTART_DB.md) - Quick database setup
 - SSL/HTTPS setup
 - Production configurations
 - Health checks & monitoring
