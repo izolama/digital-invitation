@@ -1,33 +1,47 @@
-# Sakeenah: Modern Islamic Wedding Invitation
+# Digital Invitation
 
 ![Preview](public/preview.png)
 
-A modern, interactive wedding invitation website built with Vite (React), Tailwind CSS, and Framer Motion. Created by [@mrofisr](https://github.com/mrofisr).
+A modern, interactive digital invitation website that can be customized for any event - weddings, corporate gatherings, birthdays, anniversaries, and more. Built with Vite (React), Tailwind CSS, and Framer Motion.
+
+Based on the original template by [@mrofisr](https://github.com/mrofisr).
 
 ## Features
-- Modern design & smooth animations
-- Fully responsive & mobile-first layout
-- Background music & interactive wishes (WIP)
-- Fun confetti effects and countdown timer
-- Google Maps integration
-- Digital envelope/gift feature with bank account details
-- Multiple event agenda support
+- 🎨 Modern design & smooth animations
+- 📱 Fully responsive & mobile-first layout
+- 🎵 Background music with autoplay control
+- 🎉 Fun confetti effects and countdown timer
+- 📍 Google Maps integration
+- 💳 Digital envelope/gift feature with bank account details
+- 📅 Multiple event agenda support
+- 🌐 SEO optimized with Open Graph tags
+- ⚡ Lightning-fast performance with Vite
+- 🎯 Easy customization through single config file
+
+## Use Cases
+This template is perfect for:
+- 💍 Wedding invitations
+- 🎂 Birthday celebrations
+- 🎓 Graduation parties
+- 🏢 Corporate events & gatherings
+- 🎊 Anniversary celebrations
+- 🎪 Any special event that needs a digital invitation
 
 ## Tech Stack
-- [Vite (React)](https://vite.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [Lucide Icons](https://lucide.dev/)
-- [React Confetti](https://www.npmjs.com/package/react-confetti)
+- [Vite (React)](https://vite.dev/) - Fast build tool and dev server
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [Framer Motion](https://www.framer.com/motion/) - Animation library
+- [Lucide Icons](https://lucide.dev/) - Beautiful icon library
+- [React Confetti](https://www.npmjs.com/package/react-confetti) - Celebration effects
 
 ## Installation
 1. Clone the repository and install dependencies:
   ```bash
-  git clone https://github.com/mrofisr/islamic-wedding-invitation
-  cd islamic-wedding-invitation
+  git clone https://github.com/yourusername/digital-invitation
+  cd digital-invitation
   npm install
   ```
-2. Update your wedding details in `src/config.js`.
+2. Update your event details in `src/config/config.js`.
 3. Start the development server:
   ```bash
   npm run dev
@@ -37,40 +51,42 @@ A modern, interactive wedding invitation website built with Vite (React), Tailwi
 ## Customization
 
 ### Basic Setup
-Edit `src/config.js` to customize your wedding invitation. Here's what you can configure:
+Edit `src/config/config.js` to customize your digital invitation. Here's what you can configure:
 
-#### Wedding Information
+#### Event Information
 ```javascript
 const config = {
   data: {
     // Main invitation title that appears on the page
-    title: "Pernikahan Fulan & Fulana",
+    title: "Your Event Title",
     
     // Opening message/description of the invitation
-    description: "Kami akan menikah dan mengundang Anda untuk turut merayakan momen istimewa ini.",
+    description: "Join us to celebrate this special moment together.",
     
-    // Groom's and bride's names
-    groomName: "Fulan",
-    brideName: "Fulana",
+    // Primary person/entity name (e.g., groom, birthday person, company)
+    groomName: "Host Name / Company",
     
-    // Parents' names
-    parentGroom: "Bapak Groom & Ibu Groom",
-    parentBride: "Bapak Bride & Ibu Bride",
+    // Secondary person/entity name (e.g., bride, co-host, event theme)
+    brideName: "Co-Host / Event Theme",
+    
+    // Additional context (optional - can be parents, organizers, sponsors)
+    parentGroom: "Organizer / Sponsor 1",
+    parentBride: "Organizer / Sponsor 2",
 ```
 
 #### Date, Time & Location
 ```javascript
-    // Wedding date (format: YYYY-MM-DD)
-    date: "2024-12-24",
+    // Event date (format: YYYY-MM-DD)
+    date: "2025-12-31",
     
     // Event time (free format, example: "10:00 - 12:00 WIB")
-    time: "16:16 - 17:30 WIB",
+    time: "19:00 - 22:00 WIB",
     
     // Venue/building name
-    location: "Grand Ballroom, Hotel Majesty",
+    location: "Grand Ballroom, Luxury Hotel",
     
-    // Full address of the wedding venue
-    address: "Jl. Jend. Sudirman No.1, Jakarta",
+    // Full address of the event venue
+    address: "Jl. Main Street No.123, Your City",
 ```
 
 #### Google Maps Integration
@@ -85,21 +101,29 @@ const config = {
 
 #### Event Agenda
 ```javascript
-    // List of event agenda/schedule
+    // List of event agenda/schedule (you can add multiple sessions)
     agenda: [
       {
-        // Event name
-        title: "Akad Nikah",
-        // Event date (format: YYYY-MM-DD)
-        date: "2024-12-24",
+        // Session name (e.g., "Registration", "Main Event", "Ceremony")
+        title: "Registration & Welcome",
+        // Session date (format: YYYY-MM-DD)
+        date: "2025-12-31",
         // Start time (format: HH:MM)
-        startTime: "16:16",
+        startTime: "18:30",
         // End time (format: HH:MM)
-        endTime: "17:30",
-        // Event venue
-        location: "Grand Ballroom, Hotel Majesty",
+        endTime: "19:00",
+        // Session venue
+        location: "Main Lobby",
         // Full address
-        address: "Jl. Jend. Sudirman No.1, Jakarta",
+        address: "Jl. Main Street No.123, Your City",
+      },
+      {
+        title: "Main Event",
+        date: "2025-12-31",
+        startTime: "19:00",
+        endTime: "21:00",
+        location: "Grand Ballroom",
+        address: "Jl. Main Street No.123, Your City",
       },
       // You can add more agenda items with the same format
     ],
@@ -122,16 +146,22 @@ const config = {
 
 #### Digital Envelope/Gift
 ```javascript
-    // List of bank accounts for digital envelope/gifts
+    // List of bank accounts for digital gifts/payments (optional)
+    // You can remove this section if not needed for your event
     banks: [
       {
         // Bank name
-        bank: "Bank Central Asia",
+        bank: "Bank Name",
         // Account number
         accountNumber: "1234567890",
         // Account holder name (all uppercase)
-        accountName: "FULAN",
+        accountName: "ACCOUNT HOLDER",
       },
+      {
+        bank: "Another Bank",
+        accountNumber: "0987654321",
+        accountName: "ACCOUNT HOLDER 2",
+      }
       // You can add more banks with the same format
     ]
 ```
@@ -146,89 +176,150 @@ const config = {
 ```
 
 ### Complete Configuration Example
+
+**Example 1: Corporate Event**
 ```javascript
 const config = {
   data: {
-    title: "Pernikahan Fulan & Fulana",
-    description: "Kami akan menikah dan mengundang Anda untuk turut merayakan momen istimewa ini.",
-    groomName: "Fulan",
-    brideName: "Fulana",
-    parentGroom: "Bapak Groom & Ibu Groom",
-    parentBride: "Bapak Bride & Ibu Bride",
-    date: "2024-12-24",
-    maps_url: "https://goo.gl/maps/abcdef",
-    maps_embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.0000000000005!2d106.8270733147699!3d-6.175392995514422!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f4f1b6d7b1e7%3A0x2e69f4f1b6d7b1e7!2sMonumen%20Nasional!5e0!3m2!1sid!2sid!4v1633666820004!5m2!1sid!2sid",
-    time: "16:16 - 17:30 WIB",
-    location: "Grand Ballroom, Hotel Majesty",
-    address: "Jl. Jend. Sudirman No.1, Jakarta",
+    title: "Customer Gathering 2025",
+    description: "Join us for an evening of networking and celebration.",
+    groomName: "Company Name",
+    brideName: "Steel in Harmony",
+    parentGroom: "Platinum Sponsor",
+    parentBride: "Gold Sponsor",
+    date: "2025-12-31",
+    maps_url: "https://goo.gl/maps/yourlink",
+    maps_embed: "https://www.google.com/maps/embed?pb=...",
+    time: "18:00 - 22:00 WIB",
+    location: "Grand Ballroom, Luxury Hotel",
+    address: "Jl. Business District No.1, Jakarta",
     ogImage: "/images/og-image.jpg",
     favicon: "/images/favicon.ico",
     agenda: [
       {
-        title: "Akad Nikah",
-        date: "2024-12-24",
-        startTime: "16:16",
-        endTime: "17:30",
-        location: "Grand Ballroom, Hotel Majesty",
-        address: "Jl. Jend. Sudirman No.1, Jakarta",
+        title: "Registration",
+        date: "2025-12-31",
+        startTime: "18:00",
+        endTime: "18:30",
+        location: "Main Lobby",
+        address: "Jl. Business District No.1, Jakarta",
       },
       {
-        title: "Resepsi Nikah",
-        date: "2024-12-24",
-        startTime: "16:16",
-        endTime: "17:30",
-        location: "Grand Ballroom, Hotel Majesty",
-        address: "Jl. Jend. Sudirman No.1, Jakarta",
+        title: "Networking Session",
+        date: "2025-12-31",
+        startTime: "18:30",
+        endTime: "20:00",
+        location: "Grand Ballroom",
+        address: "Jl. Business District No.1, Jakarta",
       }
     ],
     audio: {
       src: "/audio/fulfilling-humming.mp3",
-      title: "Fulfilling Humming",
-      autoplay: true,
+      title: "Background Music",
+      autoplay: false,
       loop: true
     },
-    banks: [
-      {
-        bank: "Bank Central Asia",
-        accountNumber: "1234567890",
-        accountName: "FULAN",
-      },
-      {
-        bank: "Bank Mandiri",
-        accountNumber: "0987654321",
-        accountName: "FULANA",
-      }
-    ]
+    banks: [] // No payment needed for this event
   }
 };
 
 export default config;
 ```
-## Custom Wedding Invitation Service
 
-### 💝 Want This Invitation Made for You?
+**Example 2: Wedding Invitation**
+```javascript
+const config = {
+  data: {
+    title: "Wedding of John & Jane",
+    description: "Together with our families, we invite you to celebrate our wedding.",
+    groomName: "John Doe",
+    brideName: "Jane Smith",
+    parentGroom: "Mr. & Mrs. Doe",
+    parentBride: "Mr. & Mrs. Smith",
+    date: "2025-06-15",
+    time: "14:00 - 17:00 WIB",
+    location: "Garden Venue",
+    address: "Jl. Beautiful Garden No.10, Bali",
+    // ... rest of configuration
+  }
+};
+```
+## Deployment
 
-If you're interested in having a custom wedding invitation created using this template, please note our terms:
+### Option 1: Docker (Recommended)
 
-**Requirements:**
-- You must agree with the concept and design philosophy provided
-- Willing to donate a portion of the service fee to mosques or charitable institutions in need
-- Respect the Islamic values and aesthetic principles embedded in the design
+**Quick Start with Docker:**
+```bash
+# Development/Testing
+docker-compose up -d
 
-This approach ensures that every wedding invitation created not only celebrates your special day but also contributes to the community and upholds the values of giving back.
+# Production
+docker-compose -f docker-compose.prod.yml up -d
+```
 
+The application will be available at:
+- Development: `http://localhost:8080`
+- Production: `http://localhost:80`
 
-*"And whoever does good - whether male or female - and is a believer, they will enter Paradise and will not be wronged even as much as the speck on a date seed."* - Quran 4:124
+📚 **Full Docker guide:** See [DEPLOYMENT.md](DEPLOYMENT.md) for complete instructions including:
+- SSL/HTTPS setup
+- Production configurations
+- Health checks & monitoring
+- Troubleshooting
+- CI/CD integration
+
+### Option 2: Traditional Hosting
+
+**Building for Production:**
+```bash
+npm run build
+```
+
+The build output will be in the `dist` folder, ready to be deployed.
+
+**Deployment Options:**
+- **Vercel**: Connect your GitHub repo and deploy automatically
+- **Netlify**: Drag and drop the `dist` folder or connect via Git
+- **GitHub Pages**: Use GitHub Actions to deploy
+- **Firebase Hosting**: Deploy with Firebase CLI
+- **Any Static Host**: Upload the contents of `dist` folder
+
+### Environment Setup
+No environment variables needed - all configuration is in `src/config/config.js`.
+
+## Tips for Best Results
+
+### Performance
+- Optimize images before adding them to the `public` folder
+- Use WebP format for images when possible
+- Keep audio files under 5MB for faster loading
+
+### Customization
+- Update the color scheme in `tailwind.config.js`
+- Replace fonts in `index.html` for different typography
+- Modify animations in component files using Framer Motion
+
+### SEO
+- Update `ogImage` with your event's image (1200x630px recommended)
+- Set proper `title` and `description` in config for better social sharing
+- Add your custom favicon
 
 ## License
 This project is licensed under the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0). You can use, modify, and distribute it as long as you include the original copyright notice and license.
 
 ## Contributing & Support
-Contributions and issue reports are welcome. If this project helped you, give it a ⭐️!
+Contributions and issue reports are welcome! If this project helped you:
+- ⭐ Give it a star on GitHub
+- 🐛 Report bugs via Issues
+- 💡 Suggest new features
+- 🔧 Submit pull requests
 
-## Contact
-- GitHub: [@mrofisr](https://github.com/mrofisr)
-- Instagram: [@mrofisr](https://instagram.com/mrofisr)
+## Credits
+Original template created by [@mrofisr](https://github.com/mrofisr)
 
-May Allah guide us all.
-# digital-invitation
+## Acknowledgments
+This is a versatile adaptation of the original Islamic Wedding Invitation template, made flexible for various event types while maintaining the elegant design and smooth user experience.
+
+---
+
+**Made with ❤️ for your special moments**
