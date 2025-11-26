@@ -211,16 +211,25 @@ export default function Wishes() {
                                 Food Restriction
                             </label>
                             <div className="relative">
-                                <UtensilsCrossed className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                <input
-                                    type="text"
+                                <UtensilsCrossed className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none z-10" />
+                                <select
                                     name="foodRestriction"
                                     value={formData.foodRestriction}
                                     onChange={handleInputChange}
-                                    placeholder="VEGAN/NON VEGAN"
-                                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-blue-200 rounded-2xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-blue-200 rounded-2xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none appearance-none bg-white cursor-pointer"
                                     required
-                                />
+                                >
+                                    <option value="" disabled>Select food preference...</option>
+                                    <option value="VEGAN">VEGAN</option>
+                                    <option value="NON VEGAN">NON VEGAN</option>
+                                    <option value="VEGETARIAN">VEGETARIAN</option>
+                                    <option value="NO RESTRICTION">NO RESTRICTION</option>
+                                </select>
+                                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
                             </div>
                         </motion.div>
 
@@ -234,16 +243,23 @@ export default function Wishes() {
                                 Allergies
                             </label>
                             <div className="relative">
-                                <AlertCircle className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                <input
-                                    type="text"
+                                <AlertCircle className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none z-10" />
+                                <select
                                     name="allergies"
                                     value={formData.allergies}
                                     onChange={handleInputChange}
-                                    placeholder="YES/NO"
-                                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-blue-200 rounded-2xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-blue-200 rounded-2xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none appearance-none bg-white cursor-pointer"
                                     required
-                                />
+                                >
+                                    <option value="" disabled>Do you have allergies?</option>
+                                    <option value="YES">YES</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
                             </div>
                         </motion.div>
 
@@ -257,16 +273,24 @@ export default function Wishes() {
                                 Confirmation Attendance
                             </label>
                             <div className="relative">
-                                <CheckCircle2 className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                <input
-                                    type="text"
+                                <CheckCircle2 className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none z-10" />
+                                <select
                                     name="confirmationAttendance"
                                     value={formData.confirmationAttendance}
                                     onChange={handleInputChange}
-                                    placeholder="YES/NO"
-                                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-blue-200 rounded-2xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-blue-200 rounded-2xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none appearance-none bg-white cursor-pointer"
                                     required
-                                />
+                                >
+                                    <option value="" disabled>Will you attend?</option>
+                                    <option value="YES">YES</option>
+                                    <option value="NO">NO</option>
+                                    <option value="MAYBE">MAYBE</option>
+                                </select>
+                                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
                             </div>
                         </motion.div>
 
