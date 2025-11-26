@@ -1,315 +1,328 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Confetti from 'react-confetti';
-import Marquee from "@/components/ui/marquee";
 import {
-    Calendar,
-    Clock,
-    ChevronDown,
     User,
-    MessageCircle,
-    Send,
-    Smile,
-    CheckCircle,
-    XCircle,
-    HelpCircle,
+    Building2,
+    Phone,
+    Mail,
+    UtensilsCrossed,
+    AlertCircle,
+    CheckCircle2,
+    Users,
+    Send
 } from 'lucide-react'
 import { useState } from 'react';
-import { formatEventDate } from '@/lib/formatEventDate';
+import config from '@/config/config';
 
 export default function Wishes() {
     const [showConfetti, setShowConfetti] = useState(false);
-    const [newWish, setNewWish] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [attendance, setAttendance] = useState('');
-    const [isOpen, setIsOpen] = useState(false);
+    const [formData, setFormData] = useState({
+        fullName: '',
+        companyName: '',
+        whatsappNumber: '',
+        email: '',
+        foodRestriction: '',
+        allergies: '',
+        confirmationAttendance: '',
+        numberOfPeople: '1'
+    });
 
-    const options = [
-        { value: 'ATTENDING', label: 'Ya, saya akan hadir' },
-        { value: 'NOT_ATTENDING', label: 'Tidak, saya tidak bisa hadir' },
-        { value: 'MAYBE', label: 'Mungkin, saya akan konfirmasi nanti' }
-    ];
-    // Example wishes - replace with your actual data
-    const [wishes, setWishes] = useState([
-        {
-            id: 1,
-            name: "John Doe",
-            message: "Wishing you both a lifetime of love, laughter, and happiness! 🎉",
-            timestamp: "2024-12-24T23:20:00Z",
-            attending: "attending"
-        },
-        {
-            id: 2,
-            name: "Natalie",
-            message: "Wishing you both a lifetime of love, laughter, and happiness! 🎉",
-            timestamp: "2024-12-24T23:20:00Z",
-            attending: "attending"
-        },
-        {
-            id: 3,
-            name: "Abdur Rofi",
-            message: "Congratulations on your special day! May Allah bless your union! 🤲",
-            timestamp: "2024-12-25T23:08:09Z",
-            attending: "maybe"
-        }
-    ]);
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
 
-    const handleSubmitWish = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!newWish.trim()) return;
-
         setIsSubmitting(true);
+
         // Simulating API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
-        const newWishObj = {
-            id: wishes.length + 1,
-            name: "Guest", // Replace with actual user name
-            message: newWish,
-            attend: "attending",
-            timestamp: new Date().toISOString()
-        };
-
-        setWishes(prev => [newWishObj, ...prev]);
-        setNewWish('');
+        console.log('Form submitted:', formData);
+        
         setIsSubmitting(false);
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 3000);
+        
+        // Optional: Reset form
+        // setFormData({
+        //     fullName: '',
+        //     companyName: '',
+        //     whatsappNumber: '',
+        //     email: '',
+        //     foodRestriction: '',
+        //     allergies: '',
+        //     confirmationAttendance: '',
+        //     numberOfPeople: '1'
+        // });
     };
-    const getAttendanceIcon = (status) => {
-        switch (status) {
-            case 'attending':
-                return <CheckCircle className="w-4 h-4 text-emerald-500" />;
-            case 'not-attending':
-                return <XCircle className="w-4 h-4 text-rose-500" />;
-            case 'maybe':
-                return <HelpCircle className="w-4 h-4 text-amber-500" />;
-            default:
-                return null;
-        }
-    };
-    return (<>
-        <section id="wishes" className="min-h-screen relative overflow-hidden">
-            {showConfetti && <Confetti recycle={false} numberOfPieces={200} />}
-            <div className="container mx-auto px-4 py-20 relative z-10">
-                {/* Section Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="text-center space-y-4 mb-16"
-                >
-                    <motion.span
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="inline-block text-rose-500 font-medium"
-                    >
-                        Kirimkan Doa dan Harapan Terbaik Anda
-                    </motion.span>
-
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className="text-4xl md:text-5xl font-serif text-gray-800"
-                    >
-                        Pesan dan Doa
-                    </motion.h2>
-
-                    {/* Decorative Divider */}
-                    <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: 0.4 }}
-                        className="flex items-center justify-center gap-4 pt-4"
-                    >
-                        <div className="h-[1px] w-12 bg-rose-200" />
-                        <MessageCircle className="w-5 h-5 text-rose-400" />
-                        <div className="h-[1px] w-12 bg-rose-200" />
-                    </motion.div>
-                </motion.div>
-
-                {/* Wishes List */}
-                <div className="max-w-2xl mx-auto space-y-6">
-                    <AnimatePresence>
-                        <Marquee speed={20}
-                            gradient={false}
-                            className="[--duration:20s] py-2">
-                            {wishes.map((wish, index) => (
-                                <motion.div
-                                    key={wish.id}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -20 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className="group relative w-[280px]"
-                                >
-                                    {/* Background gradient */}
-                                    <div className="absolute inset-0 bg-gradient-to-r from-rose-100/50 to-pink-100/50 rounded-xl transform transition-transform group-hover:scale-[1.02] duration-300" />
-
-                                    {/* Card content */}
-                                    <div className="relative backdrop-blur-sm bg-white/80 p-4 rounded-xl border border-rose-100/50 shadow-md">
-                                        {/* Header */}
-                                        <div className="flex items-start space-x-3 mb-2">
-                                            {/* Avatar */}
-                                            <div className="flex-shrink-0">
-                                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-rose-400 to-pink-400 flex items-center justify-center text-white text-sm font-medium">
-                                                    {wish.name[0].toUpperCase()}
-                                                </div>
-                                            </div>
-
-                                            {/* Name, Time, and Attendance */}
-                                            <div className="flex-1 min-w-0">
-                                                <div className="flex items-center space-x-2">
-                                                    <h4 className="font-medium text-gray-800 text-sm truncate">
-                                                        {wish.name}
-                                                    </h4>
-                                                    {getAttendanceIcon(wish.attending)}
-                                                </div>
-                                                <div className="flex items-center space-x-1 text-gray-500 text-xs">
-                                                    <Clock className="w-3 h-3" />
-                                                    <time className="truncate">
-                                                        {formatEventDate(wish.timestamp)}
-                                                    </time>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Message */}
-                                        <p className="text-gray-600 text-sm leading-relaxed mb-2 line-clamp-3">
-                                            {wish.message}
-                                        </p>
-
-                                        {/* Optional: Time indicator for recent messages */}
-                                        {Date.now() - new Date(wish.timestamp).getTime() < 3600000 && (
-                                            <div className="absolute top-2 right-2">
-                                                <span className="px-2 py-1 rounded-full bg-rose-100 text-rose-600 text-xs font-medium">
-                                                    New
-                                                </span>
-                                            </div>
-                                        )}
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </Marquee>
-                    </AnimatePresence>
+    return (
+        <section id="wishes" className="min-h-screen relative overflow-hidden bg-gradient-to-br from-purple-100 via-blue-50 to-purple-50">
+            {showConfetti && <Confetti recycle={false} numberOfPieces={500} />}
+            
+            {/* Background Watermark Pattern */}
+            <div className="absolute inset-0 opacity-5">
+                <div className="absolute top-10 right-10 text-9xl font-bold text-blue-600 transform rotate-12">
+                    {config.data.groomName}
                 </div>
-                {/* Wishes Form */}
+                <div className="absolute bottom-20 left-10 text-9xl font-bold text-blue-600 transform -rotate-12">
+                    {config.data.brideName}
+                </div>
+            </div>
+
+            <div className="container mx-auto px-4 py-12 relative z-10">
+                {/* Header Logo */}
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="text-center mb-8"
+                >
+                    <div className="inline-flex items-center space-x-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-8 py-4 rounded-2xl shadow-lg">
+                        <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                            <span className="text-2xl font-bold">K</span>
+                        </div>
+                        <div className="text-left">
+                            <div className="text-2xl font-bold tracking-tight">{config.data.groomName}</div>
+                            <div className="text-sm font-medium opacity-90">{config.data.brideName}</div>
+                        </div>
+                    </div>
+                </motion.div>
+                {/* Registration Form */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                    className="max-w-2xl mx-auto mt-12"
+                    transition={{ delay: 0.3 }}
+                    className="max-w-2xl mx-auto"
                 >
-                    <form onSubmit={handleSubmitWish} className="relative">
-                        <div className="backdrop-blur-sm bg-white/80 p-6 rounded-2xl border border-rose-100/50 shadow-lg">
-                            <div className='space-y-2'>
-                                {/* Name Input */}
-                                <div className="space-y-2">
-                                    <div className="flex items-center space-x-2 text-gray-500 text-sm mb-1">
-                                        <User className="w-4 h-4" />
-                                        <span>Nama Kamu</span>
-                                    </div>
-                                    <input
-                                        type="text"
-                                        placeholder="Masukan nama kamu..."
-                                        className="w-full px-4 py-2.5 rounded-xl bg-white/50 border border-rose-100 focus:border-rose-300 focus:ring focus:ring-rose-200 focus:ring-opacity-50 transition-all duration-200 text-gray-700 placeholder-gray-400"
-                                        required
-                                    />
-                                </div>
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.1 }}
-                                    className="space-y-2 relative"
-                                >
-                                    <div className="flex items-center space-x-2 text-gray-500 text-sm mb-1">
-                                        <Calendar className="w-4 h-4" />
-                                        <span>Apakah kamu hadir?</span>
-                                    </div>
+                    {/* Form Title */}
+                    <div className="text-center mb-8 space-y-2">
+                        <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600">
+                            REGISTRATION
+                        </h1>
+                        <p className="text-lg text-gray-600 font-medium">You have confirmed attendance</p>
+                    </div>
 
-                                    {/* Custom Select Button */}
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsOpen(!isOpen)}
-                                        className="w-full px-4 py-2.5 rounded-xl bg-white/50 border border-rose-100 focus:border-rose-300 focus:ring focus:ring-rose-200 focus:ring-opacity-50 transition-all duration-200 text-left flex items-center justify-between"
-                                    >
-                                        <span className={attendance ? 'text-gray-700' : 'text-gray-400'}>
-                                            {attendance ?
-                                                options.find(opt => opt.value === attendance)?.label
-                                                : 'Pilih kehadiran...'}
-                                        </span>
-                                        <ChevronDown
-                                            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isOpen ? 'transform rotate-180' : ''
-                                                }`}
-                                        />
-                                    </button>
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        {/* Full Name */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.4 }}
+                        >
+                            <label className="block text-blue-900 font-bold text-lg mb-2">
+                                Full Name
+                            </label>
+                            <div className="relative">
+                                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <input
+                                    type="text"
+                                    name="fullName"
+                                    value={formData.fullName}
+                                    onChange={handleInputChange}
+                                    placeholder="AAA"
+                                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-blue-200 rounded-2xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                                    required
+                                />
+                            </div>
+                        </motion.div>
 
-                                    {/* Dropdown Options */}
-                                    <AnimatePresence>
-                                        {isOpen && (
-                                            <motion.div
-                                                initial={{ opacity: 0, y: -10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: -10 }}
-                                                className="absolute z-10 w-full mt-1 bg-white rounded-xl shadow-lg border border-rose-100 overflow-hidden"
-                                            >
-                                                {options.map((option) => (
-                                                    <motion.button
-                                                        key={option.value}
-                                                        type="button"
-                                                        onClick={() => {
-                                                            setAttendance(option.value);
-                                                            setIsOpen(false);
-                                                        }}
-                                                        whileHover={{ backgroundColor: 'rgb(255, 241, 242)' }}
-                                                        className={`w-full px-4 py-2.5 text-left transition-colors
-                                        ${attendance === option.value
-                                                                ? 'bg-rose-50 text-rose-600'
-                                                                : 'text-gray-700 hover:bg-rose-50'
-                                                            }`}
-                                                    >
-                                                        {option.label}
-                                                    </motion.button>
-                                                ))}
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </motion.div>
-                                {/* Wish Textarea */}
-                                <div className="space-y-2">
-                                    <div className="flex items-center space-x-2 text-gray-500 text-sm mb-1">
-                                        <MessageCircle className="w-4 h-4" />
-                                        <span>Harapan kamu</span>
-                                    </div>
-                                    <textarea
-                                        placeholder="Kirimkan harapan dan doa untuk kedua mempelai..."
-                                        className="w-full h-32 p-4 rounded-xl bg-white/50 border border-rose-100 focus:border-rose-300 focus:ring focus:ring-rose-200 focus:ring-opacity-50 resize-none transition-all duration-200"
-                                        required
-                                    />
-                                </div>
+                        {/* Company Name */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.5 }}
+                        >
+                            <label className="block text-blue-900 font-bold text-lg mb-2">
+                                Company Name
+                            </label>
+                            <div className="relative">
+                                <Building2 className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <input
+                                    type="text"
+                                    name="companyName"
+                                    value={formData.companyName}
+                                    onChange={handleInputChange}
+                                    placeholder="PT XXXXXXX"
+                                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-blue-200 rounded-2xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                                    required
+                                />
                             </div>
-                            <div className="flex items-center justify-between mt-4">
-                                <div className="flex items-center space-x-2 text-gray-500">
-                                    <Smile className="w-5 h-5" />
-                                    <span className="text-sm">Berikan Doa Anda</span>
-                                </div>
-                                <motion.button
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    className={`flex items-center space-x-2 px-6 py-2.5 rounded-xl text-white font-medium transition-all duration-200
-                    ${isSubmitting
-                                            ? 'bg-gray-300 cursor-not-allowed'
-                                            : 'bg-rose-500 hover:bg-rose-600'}`}
-                                >
-                                    <Send className="w-4 h-4" />
-                                    <span>{isSubmitting ? 'Sedang Mengirim...' : 'Kirimkan Doa'}</span>
-                                </motion.button>
+                        </motion.div>
+
+                        {/* Whatsapp Number */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.6 }}
+                        >
+                            <label className="block text-blue-900 font-bold text-lg mb-2">
+                                Whatsapp Number
+                            </label>
+                            <div className="relative">
+                                <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <input
+                                    type="tel"
+                                    name="whatsappNumber"
+                                    value={formData.whatsappNumber}
+                                    onChange={handleInputChange}
+                                    placeholder="08XXXXXXXX"
+                                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-blue-200 rounded-2xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                                    required
+                                />
                             </div>
-                        </div>
+                        </motion.div>
+
+                        {/* Email Address */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.7 }}
+                        >
+                            <label className="block text-blue-900 font-bold text-lg mb-2">
+                                Email Address
+                            </label>
+                            <div className="relative">
+                                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    placeholder="AAAA@GMAIL.COM"
+                                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-blue-200 rounded-2xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                                    required
+                                />
+                            </div>
+                        </motion.div>
+
+                        {/* Food Restriction */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.8 }}
+                        >
+                            <label className="block text-blue-900 font-bold text-lg mb-2">
+                                Food Restriction
+                            </label>
+                            <div className="relative">
+                                <UtensilsCrossed className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <input
+                                    type="text"
+                                    name="foodRestriction"
+                                    value={formData.foodRestriction}
+                                    onChange={handleInputChange}
+                                    placeholder="VEGAN/NON VEGAN"
+                                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-blue-200 rounded-2xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                                    required
+                                />
+                            </div>
+                        </motion.div>
+
+                        {/* Allergies */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.9 }}
+                        >
+                            <label className="block text-blue-900 font-bold text-lg mb-2">
+                                Allergies
+                            </label>
+                            <div className="relative">
+                                <AlertCircle className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <input
+                                    type="text"
+                                    name="allergies"
+                                    value={formData.allergies}
+                                    onChange={handleInputChange}
+                                    placeholder="YES/NO"
+                                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-blue-200 rounded-2xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                                    required
+                                />
+                            </div>
+                        </motion.div>
+
+                        {/* Confirmation Attendance */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 1.0 }}
+                        >
+                            <label className="block text-blue-900 font-bold text-lg mb-2">
+                                Confirmation Attendance
+                            </label>
+                            <div className="relative">
+                                <CheckCircle2 className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <input
+                                    type="text"
+                                    name="confirmationAttendance"
+                                    value={formData.confirmationAttendance}
+                                    onChange={handleInputChange}
+                                    placeholder="YES/NO"
+                                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-blue-200 rounded-2xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                                    required
+                                />
+                            </div>
+                        </motion.div>
+
+                        {/* How many people */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 1.1 }}
+                        >
+                            <label className="block text-blue-900 font-bold text-lg mb-2">
+                                How many people will come
+                            </label>
+                            <div className="relative">
+                                <Users className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <input
+                                    type="number"
+                                    name="numberOfPeople"
+                                    value={formData.numberOfPeople}
+                                    onChange={handleInputChange}
+                                    min="1"
+                                    placeholder="1"
+                                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-blue-200 rounded-2xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                                    required
+                                />
+                            </div>
+                        </motion.div>
+
+                        {/* Submit Button */}
+                        <motion.button
+                            type="submit"
+                            disabled={isSubmitting}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 1.2 }}
+                            whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                            whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                            className={`w-full py-5 text-xl font-bold text-white rounded-2xl shadow-lg transition-all duration-300 flex items-center justify-center space-x-2
+                                ${isSubmitting 
+                                    ? 'bg-gray-400 cursor-not-allowed' 
+                                    : 'bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900'}`}
+                        >
+                            {isSubmitting ? (
+                                <>
+                                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white" />
+                                    <span>Submitting...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Send className="w-6 h-6" />
+                                    <span>SUBMIT</span>
+                                </>
+                            )}
+                        </motion.button>
                     </form>
                 </motion.div>
             </div>
         </section>
-    </>)
+    )
 }
