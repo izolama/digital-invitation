@@ -11,6 +11,7 @@ services:
       - "80:5173"
     environment:
       - NODE_ENV=production
+      - VITE_API_BASE_URL=https://backend-digital-invitation.nahsbyte.my.id
     networks:
       - shared-network
     labels:

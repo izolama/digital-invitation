@@ -1,10 +1,8 @@
 // API Configuration
 // Base URL for backend API
 
-// In development, Vite proxy handles /api requests
-// In production, use environment variable or detect from window.location
 const getApiBaseUrl = () => {
-  // Check for environment variable first
+  // Check for environment variable first (highest priority)
   if (import.meta.env.VITE_API_BASE_URL) {
     return import.meta.env.VITE_API_BASE_URL;
   }
@@ -14,22 +12,8 @@ const getApiBaseUrl = () => {
     return ''; // Vite proxy will handle /api requests
   }
   
-  // In production, try to detect backend URL
-  // If frontend and backend are on same domain but different ports
-  const host = window.location.hostname;
-  const protocol = window.location.protocol;
-  const port = window.location.port;
-  
-  // If we have VITE_API_BASE_URL, use it
-  // Otherwise, try to construct from current location
-  // For Docker: use same hostname with port 5001
-  if (host && !host.includes('localhost')) {
-    // Production: use same hostname, different port
-    return `${protocol}//${host}:5001`;
-  }
-  
-  // Fallback: localhost with port 5001
-  return `${protocol}//localhost:5001`;
+  // Production: Use dedicated backend subdomain
+  return 'https://backend-digital-invitation.nahsbyte.my.id';
 };
 
 const API_BASE_URL = getApiBaseUrl();

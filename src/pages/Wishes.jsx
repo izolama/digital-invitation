@@ -42,6 +42,9 @@ export default function Wishes() {
         setIsSubmitting(true);
 
         try {
+            console.log('Submitting to:', API_ENDPOINTS.REGISTRATIONS);
+            console.log('Form data:', formData);
+            
             // Send data to backend API
             const response = await fetch(API_ENDPOINTS.REGISTRATIONS, {
                 method: 'POST',
@@ -51,8 +54,20 @@ export default function Wishes() {
                 body: JSON.stringify(formData),
             });
 
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+
             if (!response.ok) {
-                throw new Error('Failed to submit registration');
+                // Try to get error message from response
+                let errorMessage = 'Failed to submit registration';
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.error || errorData.message || errorMessage;
+                    console.error('Error response:', errorData);
+                } catch (e) {
+                    console.error('Failed to parse error response:', e);
+                }
+                throw new Error(`${response.status}: ${errorMessage}`);
             }
 
             const data = await response.json();
@@ -79,7 +94,23 @@ export default function Wishes() {
             
         } catch (error) {
             console.error('Submission error:', error);
-            alert('Sorry, there was an error submitting your registration. Please try again.');
+            console.error('Error details:', {
+                message: error.message,
+                stack: error.stack,
+                endpoint: API_ENDPOINTS.REGISTRATIONS
+            });
+            
+            // More specific error message
+            let errorMsg = 'Sorry, there was an error submitting your registration.';
+            if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                errorMsg = 'Network error: Cannot connect to server. Please check your connection and try again.';
+            } else if (error.message.includes('CORS')) {
+                errorMsg = 'CORS error: Server configuration issue. Please contact administrator.';
+            } else if (error.message) {
+                errorMsg = `Error: ${error.message}`;
+            }
+            
+            alert(errorMsg);
         } finally {
             setIsSubmitting(false);
         }
