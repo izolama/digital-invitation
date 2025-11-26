@@ -21,13 +21,20 @@ help:
 	@echo "  make prune        - Clean up unused Docker resources"
 
 # Development environment
-dev:
+dev: init-network
 	@echo "Starting development environment..."
 	docker-compose up -d
 	@echo "Application running at http://localhost:8080"
 
+# Initialize shared network
+init-network:
+	@echo "Checking shared network..."
+	@docker network inspect shared-network >/dev/null 2>&1 || \
+		(docker network create shared-network && echo "✓ Network created") || \
+		echo "✓ Network exists"
+
 # Production environment
-prod:
+prod: init-network
 	@echo "Starting production environment..."
 	docker-compose -f docker-compose.prod.yml up -d
 	@echo "Application running at http://localhost:80"

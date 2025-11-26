@@ -250,6 +250,9 @@ const config = {
 
 **Quick Start with Docker:**
 ```bash
+# Create shared network (first time only)
+docker network create shared-network
+
 # Development/Testing
 docker-compose up -d
 
@@ -261,7 +264,9 @@ The application will be available at:
 - Development: `http://localhost:8080`
 - Production: `http://localhost:80`
 
-📚 **Full Docker guide:** See [DEPLOYMENT.md](DEPLOYMENT.md) for complete instructions including:
+📚 **Documentation:**
+- 🚀 [QUICKSTART.md](QUICKSTART.md) - Fast deployment guide
+- 📖 [DEPLOYMENT.md](DEPLOYMENT.md) - Complete Docker guide with:
 - SSL/HTTPS setup
 - Production configurations
 - Health checks & monitoring

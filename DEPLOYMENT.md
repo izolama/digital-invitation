@@ -8,12 +8,23 @@ Complete guide for deploying Digital Invitation using Docker and Docker Compose.
 - Docker Compose (version 2.0 or higher)
 - 1GB RAM minimum
 - 1GB disk space
+- Node.js 20+ (for local development, Docker handles this automatically)
 
 ## 🚀 Quick Start
 
 ### Development/Testing Deployment
 
-1. **Build and run the container:**
+1. **Create shared network (first time only):**
+```bash
+# Create the shared network for inter-container communication
+docker network create shared-network
+
+# Or use the helper script
+chmod +x init-network.sh
+./init-network.sh
+```
+
+2. **Build and run the container:**
 ```bash
 docker-compose up -d
 ```
@@ -139,6 +150,27 @@ docker inspect --format='{{.State.Health.Status}}' digital-invitation-app
 
 ## 🔍 Troubleshooting
 
+### Node version error (EBADENGINE)
+**Error:** `Unsupported engine { package: 'react-router-dom@7.9.6', required: { node: '>=20.0.0' }`
+
+**Solution:** The Dockerfile has been updated to use Node.js 20. Rebuild the image:
+```bash
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+### Shared network not found
+**Error:** `network shared-network declared as external, but could not be found`
+
+**Solution:** Create the network first:
+```bash
+docker network create shared-network
+# or
+make init-network
+# or
+./init-network.sh
+```
+
 ### Container won't start
 ```bash
 # Check logs
@@ -170,9 +202,69 @@ sudo chown -R $USER:$USER .
 sudo chmod 666 /var/run/docker.sock
 ```
 
-## 🌐 Reverse Proxy Setup (Optional)
+### Port already in use
+```bash
+# Find what's using the port
+sudo lsof -i :8080
 
-If you want to use a reverse proxy like Traefik or Nginx Proxy Manager:
+# Kill the process or change port in docker-compose.yml
+# Change "8080:80" to "8081:80" for example
+```
+
+## 🌐 Shared Network
+
+This project uses an external Docker network called `shared-network` to allow communication with other containers (e.g., reverse proxies, databases, etc.).
+
+### Network Configuration
+
+The `shared-network` is configured as an external network in both `docker-compose.yml` and `docker-compose.prod.yml`:
+
+```yaml
+networks:
+  shared-network:
+    external: true
+```
+
+### Creating the Network
+
+**Manual creation:**
+```bash
+docker network create shared-network
+```
+
+**Using helper script:**
+```bash
+chmod +x init-network.sh
+./init-network.sh
+```
+
+**Using Makefile:**
+```bash
+make init-network
+```
+
+### Why External Network?
+
+External networks allow multiple Docker Compose projects to communicate:
+- **Reverse Proxy**: Connect with Traefik, Nginx Proxy Manager, or Caddy
+- **Monitoring**: Connect with monitoring tools like Prometheus/Grafana
+- **Other Services**: Connect with other microservices or databases
+- **Isolation**: Keep services separate but allow controlled communication
+
+### Checking Network
+
+```bash
+# List all networks
+docker network ls
+
+# Inspect shared-network
+docker network inspect shared-network
+
+# See connected containers
+docker network inspect shared-network | grep Name
+```
+
+## 🔀 Reverse Proxy Setup
 
 ### Example with Traefik
 
@@ -180,9 +272,29 @@ Add labels to `docker-compose.yml`:
 ```yaml
 labels:
   - "traefik.enable=true"
+  - "traefik.docker.network=shared-network"
   - "traefik.http.routers.invitation.rule=Host(`yourdomain.com`)"
   - "traefik.http.routers.invitation.entrypoints=websecure"
   - "traefik.http.routers.invitation.tls.certresolver=letsencrypt"
+  - "traefik.http.services.invitation.loadbalancer.server.port=80"
+```
+
+### Example with Nginx Proxy Manager
+
+1. Both NPM and this app must use `shared-network`
+2. In NPM, add a new proxy host:
+   - Domain: `yourdomain.com`
+   - Forward Hostname: `digital-invitation-app`
+   - Forward Port: `80`
+   - Enable SSL if needed
+
+### Example with Caddy
+
+Caddyfile:
+```
+yourdomain.com {
+    reverse_proxy digital-invitation-app:80
+}
 ```
 
 ## 📈 Performance Optimization
