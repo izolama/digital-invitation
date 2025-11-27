@@ -2,6 +2,7 @@ import EventCards from '@/components/EventsCard'
 import config from '@/config/config'
 import { motion } from 'framer-motion'
 import { Heart } from 'lucide-react'
+import BottomOrnaments from '@/components/BottomOrnaments';
 
 export default function Events() {
     return (
@@ -80,6 +81,7 @@ export default function Events() {
                         <EventCards events={config.data.agenda} />
                     </motion.div>
                 </motion.div>
+                <BottomOrnaments />
             </section>
         </>
     )

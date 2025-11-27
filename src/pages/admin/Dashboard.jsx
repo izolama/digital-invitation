@@ -36,8 +36,6 @@ export default function Dashboard() {
     const [backendStats, setBackendStats] = useState(null);
     const [selectedRegistration, setSelectedRegistration] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedRegistration, setSelectedRegistration] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         if (user && user.token) {
@@ -108,16 +106,6 @@ export default function Dashboard() {
     const handleLogout = () => {
         logout();
         navigate('/admin/login');
-    };
-
-    const handleRowClick = (registration) => {
-        setSelectedRegistration(registration);
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setSelectedRegistration(null);
     };
 
     const handleRowClick = (registration) => {
@@ -645,4 +633,3 @@ function RegistrationDetailModal({ registration, onClose }) {
         </div>
     );
 }
-

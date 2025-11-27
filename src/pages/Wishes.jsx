@@ -14,6 +14,7 @@ import {
 import { useState } from 'react';
 import config from '@/config/config';
 import { API_ENDPOINTS } from '@/config/api';
+import BottomOrnaments from '@/components/BottomOrnaments';
 
 export default function Wishes() {
     const [showConfetti, setShowConfetti] = useState(false);
@@ -401,6 +402,7 @@ export default function Wishes() {
                     </form>
                 </motion.div>
             </div>
+            <BottomOrnaments />
         </section>
     )
 }

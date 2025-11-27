@@ -4,6 +4,7 @@ import config from '@/config/config';
 import { formatEventDate } from '@/lib/formatEventDate';
 import LogoKBI from '@/images/logo_kbi.png';
 import LogoDanantara from '@/images/danantara.png';
+import BottomOrnaments from '@/components/BottomOrnaments';
 
 export default function Hero() {
     return (
@@ -81,6 +82,7 @@ export default function Hero() {
                     </div>
                 </motion.div>
             </div>
+            <BottomOrnaments />
         </section>
     );
 }

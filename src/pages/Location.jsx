@@ -2,6 +2,7 @@ import config from "@/config/config";
 import { Clock, Navigation as NavigationIcon, MapPin, CalendarCheck, Phone, ExternalLink } from 'lucide-react'
 import { motion } from 'framer-motion';
 import { formatEventDate } from "@/lib/formatEventDate";
+import BottomOrnaments from '@/components/BottomOrnaments';
 
 export default function Location() {
     return (<>
@@ -119,6 +120,7 @@ export default function Location() {
                     </motion.div>
                 </div>
             </div>
+            <BottomOrnaments />
         </section>
     </>)
 }
