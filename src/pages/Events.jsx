@@ -1,8 +1,7 @@
-import EventCards from '@/components/EventsCard'
-import config from '@/config/config'
-import { motion } from 'framer-motion'
-import { Heart } from 'lucide-react'
+import config from '@/config/config';
+import { motion } from 'framer-motion';
 import BottomOrnaments from '@/components/BottomOrnaments';
+import { formatEventDate } from '@/lib/formatEventDate';
 
 export default function Events() {
     return (
@@ -16,70 +15,75 @@ export default function Events() {
                     transition={{ duration: 0.8 }}
                     className="relative z-10 container mx-auto px-4 py-20"
                 >
-                    {/* Section Header */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="text-center space-y-4 mb-16"
-                    >
-                        <motion.span
-                            initial={{ opacity: 0, y: 10 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.2 }}
-                            className="inline-block text-rose-500 font-medium mb-2"
-                        >
-                            Catat Tanggal Penting Ini
-                        </motion.span>
-
-                        <motion.h2
+                    <div className="max-w-3xl mx-auto text-secondary space-y-8">
+                        <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: 0.3 }}
-                            className="text-4xl md:text-5xl font-serif text-gray-800 leading-tight"
+                            transition={{ duration: 0.8 }}
+                            className="leading-relaxed text-base sm:text-lg"
                         >
-                            Rangkaian Acara Pernikahan
-                        </motion.h2>
+                            Dengan hormat, <br />
+                            Direksi PT Krakatau Baja Industri bersama ini mengundang Bapak/Ibu untuk hadir dalam acara Customer Gathering 2025, yang akan diselenggarakan pada:
+                        </motion.p>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: 0.1 }}
+                            className="bg-white/80 rounded-3xl shadow-lg border border-primary/10 px-6 py-6 sm:px-8 sm:py-8 space-y-4 text-left"
+                        >
+                            <div className="flex gap-3 sm:gap-6 text-base sm:text-lg leading-relaxed">
+                                <span className="w-28 sm:w-36 font-semibold">Hari/Tanggal</span>
+                                <span className="flex-1">: {formatEventDate(config.data.date, 'full')}</span>
+                            </div>
+                            <div className="flex gap-3 sm:gap-6 text-base sm:text-lg leading-relaxed">
+                                <span className="w-28 sm:w-36 font-semibold">Pukul</span>
+                                <span className="flex-1">: {config.data.time}</span>
+                            </div>
+                            <div className="flex gap-3 sm:gap-6 text-base sm:text-lg leading-relaxed">
+                                <span className="w-28 sm:w-36 font-semibold">Tempat</span>
+                                <span className="flex-1">: {config.data.location}</span>
+                            </div>
+                            <div className="flex gap-3 sm:gap-6 text-base sm:text-lg leading-relaxed items-start">
+                                <span className="w-28 sm:w-36 font-semibold">Rangkaian Acara</span>
+                                <div className="flex-1">
+                                    <ul className="list-disc pl-5 space-y-1">
+                                        <li>Appreciation Night</li>
+                                        <li>Gala Dinner</li>
+                                        <li>Signing Agreement &amp; Awarding Ceremony</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </motion.div>
 
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: 0.4 }}
-                            className="text-gray-500 max-w-md mx-auto"
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className="leading-relaxed text-base sm:text-lg"
                         >
-                            Kami Mengundang Anda untuk Merayakan Hari Istimewa Sebagai Awal Perjalanan Cinta Kami
+                            Atas perhatian serta kehadiran Bapak/Ibu kami mengucapkan terima kasih.
                         </motion.p>
 
-                        {/* Decorative Line */}
                         <motion.div
-                            initial={{ scale: 0 }}
-                            whileInView={{ scale: 1 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: 0.5 }}
-                            className="flex items-center justify-center gap-4 mt-6"
+                            transition={{ duration: 0.8, delay: 0.3 }}
+                            className="text-center space-y-6 text-base sm:text-lg"
                         >
-                            <div className="h-[1px] w-12 bg-rose-200" />
-                            <div className="text-rose-400">
-                                <Heart className="w-4 h-4" fill="currentColor" />
+                            <div className="font-semibold uppercase tracking-[0.08em]">
+                                PT KRAKATAU BAJA INDUSTRI
                             </div>
-                            <div className="h-[1px] w-12 bg-rose-200" />
+                            <div className="space-y-1">
+                                <div className="font-semibold uppercase tracking-[0.08em]">ARIEF PURNOMO</div>
+                                <div className="text-base sm:text-lg">Plt. Direktur Utama</div>
+                            </div>
                         </motion.div>
-                    </motion.div>
-
-                    {/* Events Grid */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.6 }}
-                        className="max-w-2xl mx-auto"
-                    >
-                        <EventCards events={config.data.agenda} />
-                    </motion.div>
+                    </div>
                 </motion.div>
                 <BottomOrnaments />
             </section>

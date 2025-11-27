@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Music, PauseCircle, PlayCircle } from 'lucide-react';
 import config from '@/config/config';
 import BottomBar from '@/components/BottomBar';
+import BgGradient from '@/images/bg-gradient.png';
 
 const Layout = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -163,19 +164,28 @@ const Layout = ({ children }) => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={toggleMusic}
-          className="fixed top-4 right-4 z-50 bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-lg border border-rose-100/50"
+          className="fixed bottom-[27px] right-4 z-50 bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-lg border border-primary/20"
         >
           {isPlaying ? (
             <div className="relative">
-              <PauseCircle className="w-6 h-6 text-rose-500" />
+              <PauseCircle className="w-6 h-6 text-primary" />
               <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse" />
             </div>
           ) : (
-            <PlayCircle className="w-6 h-6 text-rose-500" />
+            <PlayCircle className="w-6 h-6 text-primary" />
           )}
         </motion.button>
 
         <main className="relative h-full w-full pb-[100px] overflow-hidden">
+          {/* Full background image */}
+          <div className="pointer-events-none absolute inset-0">
+            <img
+              src={BgGradient}
+              alt=""
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
           {/* Soft gradient background */}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white via-primary/5 to-white" />
           <div className="pointer-events-none absolute -top-20 -left-20 w-64 h-64 sm:w-80 sm:h-80 bg-primary/10 rounded-full blur-3xl" />
