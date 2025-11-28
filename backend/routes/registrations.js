@@ -76,11 +76,28 @@ router.post('/', async (req, res) => {
       ]
     );
 
+    // Log the result for debugging
+    console.log('Registration inserted successfully');
+    console.log('Result rows:', result.rows);
+    console.log('ID from database:', result.rows[0]?.id);
+    console.log('ID type:', typeof result.rows[0]?.id);
+    console.log('ID value:', JSON.stringify(result.rows[0]?.id));
+
+    const registrationId = result.rows[0]?.id;
+    
+    // Ensure ID is converted to string if it's not already
+    const idString = registrationId ? String(registrationId) : null;
+    
+    if (!idString) {
+      console.error('ERROR: Registration ID is null or undefined!');
+      console.error('Full result:', JSON.stringify(result.rows[0], null, 2));
+    }
+
     res.status(201).json({
       success: true,
       message: 'Registration submitted successfully',
       data: {
-        id: result.rows[0].id,
+        id: idString,
         fullName: result.rows[0].full_name,
         createdAt: result.rows[0].created_at
       }

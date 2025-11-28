@@ -82,18 +82,27 @@ export default function Wishes() {
             const data = await response.json();
             console.log('Registration successful:', data);
             console.log('Response data structure:', JSON.stringify(data, null, 2));
+            console.log('data.data:', data.data);
+            console.log('data.data?.id:', data.data?.id);
+            console.log('data.id:', data.id);
 
             // Get registration ID from response
             const regId = data.data?.id || data.id;
             console.log('Registration ID extracted:', regId);
+            console.log('Registration ID type:', typeof regId);
+            console.log('Registration ID value:', JSON.stringify(regId));
             
-            if (regId) {
+            // Convert to string if needed
+            const regIdString = regId ? String(regId) : null;
+            console.log('Registration ID as string:', regIdString);
+            
+            if (regIdString) {
                 // Generate URL for registration detail
                 const baseUrl = window.location.origin;
-                const detailUrl = `${baseUrl}/registration/${regId}`;
+                const detailUrl = `${baseUrl}/registration/${regIdString}`;
                 console.log('Registration URL:', detailUrl);
                 
-                setRegistrationId(regId);
+                setRegistrationId(regIdString);
                 setRegistrationUrl(detailUrl);
                 
                 // Show QR code modal
