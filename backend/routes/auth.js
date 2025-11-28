@@ -53,36 +53,25 @@ router.post('/admin/login', async (req, res) => {
       });
     }
     
-    // Verify password with simple try-catch
-    let validPassword = false;
+    // Verify password
+    console.log('Starting bcrypt.compare...');
     const startTime = Date.now();
     
+    // Use Promise with explicit timeout
+    const comparePromise = bcrypt.compare(password, user.password_hash);
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Bcrypt compare timeout after 10 seconds')), 10000);
+    });
+    
+    let validPassword;
     try {
-      console.log('Starting bcrypt.compare...');
-      validPassword = await bcrypt.compare(password, user.password_hash);
+      validPassword = await Promise.race([comparePromise, timeoutPromise]);
       const duration = Date.now() - startTime;
-      console.log(`Password verification completed in ${duration}ms`);
+      console.log(`✅ Password verification completed in ${duration}ms`);
       console.log('Password valid:', validPassword);
-      
-      if (!validPassword) {
-        console.log('Invalid password for user:', user.email);
-        
-        // Ensure CORS headers
-        const origin = req.headers.origin;
-        if (origin) {
-          res.header('Access-Control-Allow-Origin', origin);
-          res.header('Access-Control-Allow-Credentials', 'true');
-        }
-        
-        return res.status(401).json({
-          success: false,
-          error: 'Invalid credentials'
-        });
-      }
-    } catch (bcryptError) {
+    } catch (error) {
       const duration = Date.now() - startTime;
-      console.error(`Bcrypt error after ${duration}ms:`, bcryptError.message);
-      console.error('Bcrypt error stack:', bcryptError.stack);
+      console.error(`❌ Password verification failed after ${duration}ms:`, error.message);
       
       // Ensure CORS headers on error
       const origin = req.headers.origin;
@@ -96,6 +85,24 @@ router.post('/admin/login', async (req, res) => {
         error: 'Password verification failed'
       });
     }
+    
+    if (!validPassword) {
+      console.log('❌ Invalid password for user:', user.email);
+      
+      // Ensure CORS headers
+      const origin = req.headers.origin;
+      if (origin) {
+        res.header('Access-Control-Allow-Origin', origin);
+        res.header('Access-Control-Allow-Credentials', 'true');
+      }
+      
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid credentials'
+      });
+    }
+    
+    console.log('✅ Password verified successfully, continuing login...');
 
     // Password already verified above, continue with login
 
