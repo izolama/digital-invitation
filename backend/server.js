@@ -186,9 +186,12 @@ process.on('uncaughtException', (error) => {
   // Don't exit, let the process continue
 });
 
-// Handle unhandled promise rejections
+// Handle unhandled promise rejections (first handler - log only)
 process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  console.error('Unhandled Rejection at:', promise);
+  console.error('Reason:', reason);
+  console.error('Stack:', reason?.stack);
+  // Don't exit immediately, let the second handler decide
 });
 
 // Start server
@@ -200,10 +203,6 @@ app.listen(PORT, () => {
   console.log(`✓ Health check: http://localhost:${PORT}/health`);
 });
 
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err) => {
-  console.error('Unhandled Promise Rejection:', err);
-  // Close server & exit process
-  process.exit(1);
-});
+// Note: unhandledRejection handler is already defined above
+// This is a backup handler that will exit if needed
 

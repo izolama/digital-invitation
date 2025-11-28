@@ -57,10 +57,17 @@ router.post('/admin/login', async (req, res) => {
     console.log('Starting bcrypt.compare...');
     const startTime = Date.now();
     
-    let validPassword;
+    let validPassword = false;
     try {
-      // Simple bcrypt compare without timeout (should be fast)
-      validPassword = await bcrypt.compare(password, user.password_hash);
+      // Wrap bcrypt.compare in Promise to ensure it doesn't block
+      console.log('Calling bcrypt.compare()...');
+      console.log('Hash preview:', user.password_hash.substring(0, 20) + '...');
+      
+      // Use Promise.resolve to ensure proper async handling
+      validPassword = await Promise.resolve(
+        bcrypt.compare(password, user.password_hash)
+      );
+      
       const duration = Date.now() - startTime;
       console.log(`✅ Password verification completed in ${duration}ms`);
       console.log('Password valid:', validPassword);
@@ -100,35 +107,63 @@ router.post('/admin/login', async (req, res) => {
     
     console.log('✅ Password verified successfully, continuing login...');
 
-    // Password already verified above, continue with login
+    try {
+      // Update last login
+      console.log('Updating last login...');
+      await pool.query(
+        'UPDATE admin_users SET last_login = CURRENT_TIMESTAMP WHERE id = $1',
+        [user.id]
+      );
+      console.log('Last login updated');
 
-    // Update last login
-    await pool.query(
-      'UPDATE admin_users SET last_login = CURRENT_TIMESTAMP WHERE id = $1',
-      [user.id]
-    );
+      // Generate JWT token
+      console.log('Generating JWT token...');
+      const token = jwt.sign(
+        { 
+          id: user.id, 
+          email: user.email,
+          role: user.role 
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
+      );
+      console.log('JWT token generated');
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { 
-        id: user.id, 
-        email: user.email,
-        role: user.role 
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
-    );
-
-    res.json({
-      success: true,
-      data: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        token
+      // Ensure CORS headers before sending response
+      const origin = req.headers.origin;
+      if (origin) {
+        res.header('Access-Control-Allow-Origin', origin);
+        res.header('Access-Control-Allow-Credentials', 'true');
       }
-    });
+
+      console.log('Sending success response...');
+      res.json({
+        success: true,
+        data: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          token
+        }
+      });
+      console.log('✅ Login successful, response sent');
+    } catch (dbError) {
+      console.error('Database/JWT error:', dbError);
+      console.error('Error stack:', dbError.stack);
+      
+      // Ensure CORS headers on error
+      const origin = req.headers.origin;
+      if (origin) {
+        res.header('Access-Control-Allow-Origin', origin);
+        res.header('Access-Control-Allow-Credentials', 'true');
+      }
+      
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to complete login'
+      });
+    }
   } catch (error) {
     console.error('Login error:', error);
     console.error('Error stack:', error.stack);
