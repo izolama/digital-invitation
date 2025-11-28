@@ -57,21 +57,17 @@ router.post('/admin/login', async (req, res) => {
     console.log('Starting bcrypt.compare...');
     const startTime = Date.now();
     
-    // Use Promise with explicit timeout
-    const comparePromise = bcrypt.compare(password, user.password_hash);
-    const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('Bcrypt compare timeout after 10 seconds')), 10000);
-    });
-    
     let validPassword;
     try {
-      validPassword = await Promise.race([comparePromise, timeoutPromise]);
+      // Simple bcrypt compare without timeout (should be fast)
+      validPassword = await bcrypt.compare(password, user.password_hash);
       const duration = Date.now() - startTime;
       console.log(`✅ Password verification completed in ${duration}ms`);
       console.log('Password valid:', validPassword);
     } catch (error) {
       const duration = Date.now() - startTime;
-      console.error(`❌ Password verification failed after ${duration}ms:`, error.message);
+      console.error(`❌ Password verification error after ${duration}ms:`, error.message);
+      console.error('Error stack:', error.stack);
       
       // Ensure CORS headers on error
       const origin = req.headers.origin;
