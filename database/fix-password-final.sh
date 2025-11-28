@@ -8,7 +8,11 @@ DB_PORT=${DB_PORT:-"5432"}
 DB_USER=${DB_USER:-"postgres"}
 DB_PASSWORD=${DB_PASSWORD:-"ShaninHanan23"}
 DB_NAME="digital_invitation"
-BACKEND_DIR="../backend"
+
+# Get script directory and project root
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+BACKEND_DIR="$PROJECT_ROOT/backend"
 
 echo "🔐 Final Password Fix"
 echo "===================="
@@ -17,9 +21,14 @@ echo ""
 
 # Check if backend exists
 if [ ! -d "$BACKEND_DIR" ]; then
-    echo "❌ Backend directory not found"
+    echo "❌ Backend directory not found: $BACKEND_DIR"
+    echo "Current directory: $(pwd)"
+    echo "Script directory: $SCRIPT_DIR"
+    echo "Project root: $PROJECT_ROOT"
     exit 1
 fi
+
+echo "Backend directory: $BACKEND_DIR"
 
 # Install bcrypt if needed
 if [ ! -d "$BACKEND_DIR/node_modules/bcrypt" ]; then
