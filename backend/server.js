@@ -14,6 +14,10 @@ const adminRoutes = require('./routes/admin');
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+// Trust proxy (required when behind reverse proxy like Cloudflare, Nginx, etc.)
+// This allows Express to correctly identify client IP from X-Forwarded-For header
+app.set('trust proxy', true);
+
 // Security middleware
 app.use(helmet());
 
