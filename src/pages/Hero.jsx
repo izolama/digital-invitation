@@ -39,7 +39,9 @@ export default function Hero() {
                 />
             </div>
 
-            <div className="relative z-10 w-full max-w-5xl mx-auto mt-10 sm:mt-14 pb-16 flex flex-col items-center gap-10 sm:gap-12">
+            <div className="relative z-10 w-full max-w-5xl mx-auto mt-10 sm:mt-14 pb-25 flex flex-col items-center gap-10 sm:gap-12">
+
+
                 {/* Main headline */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -49,17 +51,29 @@ export default function Hero() {
                 >
                     <div className="space-y-2 sm:space-y-3">
                         <p className="text-secondary uppercase tracking-[0.08em] text-sm sm:text-base font-semibold">
+                            UNDANGAN
+                        </p>
+                        <p className="text-secondary uppercase tracking-[0.08em] text-sm sm:text-base font-semibold">
                             {config.data.groomName}
                         </p>
-                        <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif text-secondary uppercase tracking-[0.06em]">
+                        <h1 className="text-3xl sm:text-5xl md:text-4xl font-serif text-secondary uppercase tracking-[0.06em]">
                             {config.data.brideName}
                         </h1>
                     </div>
 
-                    <p className="text-secondary text-base sm:text-lg font-medium leading-tight">
-                        Join us for an evening of<br />
-                        appreciation and connection
-                    </p>
+                </motion.div>
+
+                {/* Decorative Divider */}
+                <motion.div
+                    initial={{ scale: 0 }}
+                    whileInView={{ scale: 1 }}
+                    transition={{ delay: 0.4 }}
+                    viewport={{ once: true }}
+                    className="flex items-center justify-center gap-4 pt-4"
+                >
+                    <div className="h-[1px] w-12 bg-rose-200" />
+                    <MapPin className="w-5 h-5 text-rose-400" />
+                    <div className="h-[1px] w-12 bg-rose-200" />
                 </motion.div>
 
                 {/* Event details */}
@@ -67,7 +81,7 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
-                    className="flex flex-col items-center gap-3 sm:gap-4 text-secondary max-w-2xl mx-auto"
+                    className="flex flex-col items-center gap-3 sm:gap-1 text-secondary max-w-2xl mx-auto"
                 >
                     <div className="flex items-center gap-2 text-sm sm:text-base font-semibold uppercase tracking-[0.05em]">
                         <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
@@ -83,32 +97,7 @@ export default function Hero() {
                     </div>
                 </motion.div>
 
-                {/* QR to Google Maps */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.3 }}
-                    className="mt-6 sm:mt-8 flex flex-col items-center gap-3"
-                >
-                    <div className="text-secondary font-semibold text-sm uppercase tracking-[0.08em]">
-                        Scan to open map
-                    </div>
-                    <div className="p-3 bg-white/80 rounded-2xl shadow-lg border border-primary/10">
-                        {(() => {
-                            const mapLink = config.data.maps_url && config.data.maps_url.startsWith('http')
-                                ? config.data.maps_url
-                                : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(config.data.location || '')}`;
-                            return (
-                                <img
-                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(mapLink)}`}
-                                    alt="QR code to open map"
-                                    className="w-40 h-40 sm:w-44 sm:h-44 object-contain"
-                                    loading="lazy"
-                                />
-                            );
-                        })()}
-                    </div>
-                </motion.div>
+
             </div>
             <BottomOrnaments />
         </section>

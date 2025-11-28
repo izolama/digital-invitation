@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 const menuItems = [
   { icon: Home, label: 'Home', href: '#home', id: 'home' },
   { icon: CalendarHeart, label: 'Event', href: '#event', id: 'event' },
-  // { icon: MapPin, label: 'Location', href: '#location', id: 'location' },
+  { icon: MapPin, label: 'Rundown', href: '#location', id: 'location' },
   // { icon: Gift, label: 'Hadiah', href: '#gifts', id: 'gifts' },
   { icon: MessageCircleHeart, label: 'Registration', href: '#wishes', id: 'wishes' },
 ];
