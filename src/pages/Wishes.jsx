@@ -15,7 +15,7 @@ import {
     CheckCircle,
     Download
 } from 'lucide-react'
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import config from '@/config/config';
 import { API_ENDPOINTS } from '@/config/api';
 import BottomOrnaments from '@/components/BottomOrnaments';
@@ -102,12 +102,17 @@ export default function Wishes() {
                 const detailUrl = `${baseUrl}/registration/${regIdString}`;
                 console.log('Registration URL:', detailUrl);
                 
+                // Set all states first
                 setRegistrationId(regIdString);
                 setRegistrationUrl(detailUrl);
                 
-                // Show QR code modal
-                console.log('Showing QR modal...');
-                setShowQRModal(true);
+                // Use setTimeout to ensure state updates are processed
+                setTimeout(() => {
+                    console.log('Showing QR modal...');
+                    console.log('Current registrationId:', regIdString);
+                    console.log('Current registrationUrl:', detailUrl);
+                    setShowQRModal(true);
+                }, 100);
             } else {
                 console.error('No registration ID in response:', data);
                 alert('Registration successful, but could not generate QR code. Please contact support.');
@@ -157,6 +162,15 @@ export default function Wishes() {
         }
     };
 
+    // Debug: Log state changes for QR modal
+    useEffect(() => {
+        if (showQRModal) {
+            console.log('QR Modal should be visible');
+            console.log('registrationId:', registrationId);
+            console.log('registrationUrl:', registrationUrl);
+        }
+    }, [showQRModal, registrationId, registrationUrl]);
+
     const downloadQRCode = () => {
         try {
             // Get the SVG element
@@ -194,7 +208,9 @@ export default function Wishes() {
                         const downloadUrl = URL.createObjectURL(blob);
                         const link = document.createElement('a');
                         link.href = downloadUrl;
-                        link.download = `registration-qr-${registrationId || 'code'}.png`;
+                        // Use first 8 chars of UUID for filename (shorter and cleaner)
+                        const idForFilename = registrationId ? registrationId.substring(0, 8) : 'code';
+                        link.download = `registration-qr-${idForFilename}.png`;
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);
@@ -509,7 +525,7 @@ export default function Wishes() {
             <BottomOrnaments />
 
             {/* QR Code Modal */}
-            {showQRModal && registrationId && registrationUrl && (
+            {showQRModal && (
                 <div 
                     className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
                     onClick={() => setShowQRModal(false)}
@@ -539,25 +555,39 @@ export default function Wishes() {
                         <div className="flex flex-col items-center space-y-4 mb-6">
                             <div 
                                 ref={qrCodeRef}
-                                className="bg-white p-4 rounded-xl border-2 border-gray-200"
+                                className="bg-white p-4 rounded-xl border-2 border-gray-200 flex items-center justify-center"
                             >
-                                <QRCode
-                                    value={registrationUrl}
-                                    size={256}
-                                    level="H"
-                                    includeMargin={true}
-                                />
+                                {registrationUrl ? (
+                                    <QRCode
+                                        value={registrationUrl}
+                                        size={256}
+                                        level="H"
+                                        includeMargin={true}
+                                    />
+                                ) : (
+                                    <div className="text-gray-500 py-20">Generating QR code...</div>
+                                )}
                             </div>
-                            <div className="text-center">
-                                <p className="text-sm text-gray-600 mb-2">Registration ID: #{registrationId}</p>
-                                <a
-                                    href={registrationUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-600 hover:underline text-sm break-all"
-                                >
-                                    {registrationUrl}
-                                </a>
+                            <div className="text-center w-full">
+                                <p className="text-sm text-gray-600 mb-2">
+                                    Registration ID: {registrationId ? (
+                                        <span className="font-mono text-xs">{registrationId.substring(0, 8)}...</span>
+                                    ) : (
+                                        <span className="text-red-500">Not available</span>
+                                    )}
+                                </p>
+                                {registrationUrl ? (
+                                    <a
+                                        href={registrationUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 hover:underline text-sm break-all inline-block max-w-full"
+                                    >
+                                        {registrationUrl}
+                                    </a>
+                                ) : (
+                                    <p className="text-gray-500 text-sm">URL not available</p>
+                                )}
                             </div>
                         </div>
 

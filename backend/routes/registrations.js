@@ -93,7 +93,7 @@ router.post('/', async (req, res) => {
       console.error('Full result:', JSON.stringify(result.rows[0], null, 2));
     }
 
-    res.status(201).json({
+    const responseData = {
       success: true,
       message: 'Registration submitted successfully',
       data: {
@@ -101,12 +101,23 @@ router.post('/', async (req, res) => {
         fullName: result.rows[0].full_name,
         createdAt: result.rows[0].created_at
       }
-    });
+    };
+
+    console.log('Sending response:', JSON.stringify(responseData, null, 2));
+    console.log('Response ID:', responseData.data.id);
+    console.log('Response ID type:', typeof responseData.data.id);
+
+    res.status(201).json(responseData);
   } catch (error) {
     console.error('Registration error:', error);
+    console.error('Error stack:', error.stack);
+    console.error('Error message:', error.message);
+    console.error('Error details:', JSON.stringify(error, Object.getOwnPropertyNames(error)));
+    
     res.status(500).json({
       success: false,
-      error: 'Failed to submit registration'
+      error: 'Failed to submit registration',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });
