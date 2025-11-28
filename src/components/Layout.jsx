@@ -90,7 +90,9 @@ const Layout = ({ children }) => {
     const handlePlay = () => {
       setIsPlaying(true);
       setShowToast(true);
-      setTimeout(() => setShowToast(false), config.audio.toastDuration);
+      // Use default toast duration if not specified in config
+      const toastDuration = config.data?.audio?.toastDuration || 3000;
+      setTimeout(() => setShowToast(false), toastDuration);
     };
 
     const handlePause = () => {

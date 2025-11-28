@@ -110,24 +110,30 @@ export default function Wishes() {
                 console.log('📝 Setting registrationUrl state to:', detailUrl);
                 setRegistrationUrl(detailUrl);
                 
-                // Show modal immediately - use multiple methods to ensure it shows
-                console.log('🎯 Attempting to show QR modal...');
-                
-                // Method 1: Immediate
-                setShowQRModal(true);
-                console.log('✅ setShowQRModal(true) called immediately');
-                
-                // Method 2: requestAnimationFrame (next frame)
-                requestAnimationFrame(() => {
-                    console.log('✅ setShowQRModal(true) called via requestAnimationFrame');
+                // Show modal immediately - wrap in try-catch to prevent errors from blocking
+                try {
+                    console.log('🎯 Attempting to show QR modal...');
+                    
+                    // Method 1: Immediate
                     setShowQRModal(true);
-                });
-                
-                // Method 3: setTimeout (fallback)
-                setTimeout(() => {
-                    console.log('✅ setShowQRModal(true) called via setTimeout');
+                    console.log('✅ setShowQRModal(true) called immediately');
+                    
+                    // Method 2: requestAnimationFrame (next frame)
+                    requestAnimationFrame(() => {
+                        console.log('✅ setShowQRModal(true) called via requestAnimationFrame');
+                        setShowQRModal(true);
+                    });
+                    
+                    // Method 3: setTimeout (fallback)
+                    setTimeout(() => {
+                        console.log('✅ setShowQRModal(true) called via setTimeout');
+                        setShowQRModal(true);
+                    }, 50);
+                } catch (error) {
+                    console.error('❌ Error showing QR modal:', error);
+                    // Still try to show modal even if there's an error
                     setShowQRModal(true);
-                }, 50);
+                }
             } else {
                 console.error('❌ No registration ID in response:', data);
                 alert('Registration successful, but could not generate QR code. Please contact support.');
