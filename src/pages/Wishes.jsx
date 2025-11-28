@@ -80,45 +80,56 @@ export default function Wishes() {
             }
 
             const data = await response.json();
-            console.log('Registration successful:', data);
-            console.log('Response data structure:', JSON.stringify(data, null, 2));
-            console.log('data.data:', data.data);
-            console.log('data.data?.id:', data.data?.id);
-            console.log('data.id:', data.id);
+            console.log('✅ Registration successful:', data);
+            console.log('📦 Response data structure:', JSON.stringify(data, null, 2));
+            console.log('📦 data.data:', data.data);
+            console.log('📦 data.data?.id:', data.data?.id);
+            console.log('📦 data.id:', data.id);
 
             // Get registration ID from response
             const regId = data.data?.id || data.id;
-            console.log('Registration ID extracted:', regId);
-            console.log('Registration ID type:', typeof regId);
-            console.log('Registration ID value:', JSON.stringify(regId));
+            console.log('🔍 Registration ID extracted:', regId);
+            console.log('🔍 Registration ID type:', typeof regId);
+            console.log('🔍 Registration ID value:', JSON.stringify(regId));
             
             // Convert to string if needed
             const regIdString = regId ? String(regId) : null;
-            console.log('Registration ID as string:', regIdString);
+            console.log('🔍 Registration ID as string:', regIdString);
+            console.log('🔍 regIdString truthy?', !!regIdString);
             
             if (regIdString) {
                 // Generate URL for registration detail
                 const baseUrl = window.location.origin;
                 const detailUrl = `${baseUrl}/registration/${regIdString}`;
-                console.log('Registration URL:', detailUrl);
+                console.log('🔗 Registration URL:', detailUrl);
                 
                 // Set all states first
+                console.log('📝 Setting registrationId state to:', regIdString);
                 setRegistrationId(regIdString);
+                
+                console.log('📝 Setting registrationUrl state to:', detailUrl);
                 setRegistrationUrl(detailUrl);
                 
-                // Force modal to show - use immediate update
-                console.log('Setting states for QR modal...');
-                console.log('registrationId:', regIdString);
-                console.log('registrationUrl:', detailUrl);
+                // Show modal immediately - use multiple methods to ensure it shows
+                console.log('🎯 Attempting to show QR modal...');
                 
-                // Show modal immediately after state is set
-                // Use a small delay to ensure React has processed the state updates
+                // Method 1: Immediate
+                setShowQRModal(true);
+                console.log('✅ setShowQRModal(true) called immediately');
+                
+                // Method 2: requestAnimationFrame (next frame)
                 requestAnimationFrame(() => {
-                    console.log('Showing QR modal via requestAnimationFrame...');
+                    console.log('✅ setShowQRModal(true) called via requestAnimationFrame');
                     setShowQRModal(true);
                 });
+                
+                // Method 3: setTimeout (fallback)
+                setTimeout(() => {
+                    console.log('✅ setShowQRModal(true) called via setTimeout');
+                    setShowQRModal(true);
+                }, 50);
             } else {
-                console.error('No registration ID in response:', data);
+                console.error('❌ No registration ID in response:', data);
                 alert('Registration successful, but could not generate QR code. Please contact support.');
             }
 
