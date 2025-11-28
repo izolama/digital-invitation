@@ -14,10 +14,6 @@ const adminRoutes = require('./routes/admin');
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// Trust proxy (required when behind reverse proxy like Cloudflare, Nginx, etc.)
-// This allows Express to correctly identify client IP from X-Forwarded-For header
-app.set('trust proxy', true);
-
 // Security middleware
 app.use(helmet());
 
@@ -63,13 +59,21 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Rate limiting
+// keyGenerator: Use connection IP directly, ignore X-Forwarded-For
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
   max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
   message: {
     success: false,
     error: 'Too many requests, please try again later'
-  }
+  },
+  // Use connection IP directly, don't trust proxy headers
+  keyGenerator: (req) => {
+    return req.ip || req.connection.remoteAddress || 'unknown';
+  },
+  // Skip X-Forwarded-For validation
+  standardHeaders: true,
+  legacyHeaders: false
 });
 app.use('/api/', limiter);
 
