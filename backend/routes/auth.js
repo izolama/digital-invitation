@@ -42,6 +42,7 @@ router.post('/admin/login', async (req, res) => {
     console.log('Password hash from DB:', user.password_hash ? 'exists' : 'missing');
     console.log('Hash length:', user.password_hash?.length || 0);
     console.log('Hash starts with:', user.password_hash?.substring(0, 7) || 'N/A');
+    console.log('Password length:', password?.length || 0);
     
     // Validate hash format
     if (!user.password_hash || user.password_hash.length < 50) {
@@ -52,26 +53,35 @@ router.post('/admin/login', async (req, res) => {
       });
     }
     
-    // Add timeout for bcrypt.compare (max 5 seconds)
+    // Verify password with simple try-catch
     let validPassword = false;
+    const startTime = Date.now();
+    
     try {
-      const comparePromise = bcrypt.compare(password, user.password_hash);
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Password verification timeout')), 5000)
-      );
-      
-      validPassword = await Promise.race([comparePromise, timeoutPromise]);
+      console.log('Starting bcrypt.compare...');
+      validPassword = await bcrypt.compare(password, user.password_hash);
+      const duration = Date.now() - startTime;
+      console.log(`Password verification completed in ${duration}ms`);
       console.log('Password valid:', validPassword);
       
       if (!validPassword) {
         console.log('Invalid password for user:', user.email);
+        
+        // Ensure CORS headers
+        const origin = req.headers.origin;
+        if (origin) {
+          res.header('Access-Control-Allow-Origin', origin);
+          res.header('Access-Control-Allow-Credentials', 'true');
+        }
+        
         return res.status(401).json({
           success: false,
           error: 'Invalid credentials'
         });
       }
     } catch (bcryptError) {
-      console.error('Bcrypt error:', bcryptError.message);
+      const duration = Date.now() - startTime;
+      console.error(`Bcrypt error after ${duration}ms:`, bcryptError.message);
       console.error('Bcrypt error stack:', bcryptError.stack);
       
       // Ensure CORS headers on error
@@ -83,9 +93,7 @@ router.post('/admin/login', async (req, res) => {
       
       return res.status(500).json({
         success: false,
-        error: bcryptError.message === 'Password verification timeout' 
-          ? 'Password verification timed out' 
-          : 'Password verification failed'
+        error: 'Password verification failed'
       });
     }
 
