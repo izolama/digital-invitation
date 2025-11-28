@@ -12,15 +12,6 @@ import {
     RefreshCw,
     Filter,
     Calendar,
-    X,
-    User,
-    Building2,
-    Phone,
-    Mail,
-    UtensilsCrossed,
-    AlertCircle,
-    Users as UsersIcon,
-    Clock
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import config from '@/config/config';
@@ -34,8 +25,6 @@ export default function Dashboard() {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('all');
     const [backendStats, setBackendStats] = useState(null);
-    const [selectedRegistration, setSelectedRegistration] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         if (user && user.token) {
@@ -109,13 +98,8 @@ export default function Dashboard() {
     };
 
     const handleRowClick = (registration) => {
-        setSelectedRegistration(registration);
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setSelectedRegistration(null);
+        // Navigate to detail page instead of opening modal
+        navigate(`/registration/${registration.id}`);
     };
 
     const getStatusIcon = (status) => {
@@ -428,208 +412,7 @@ export default function Dashboard() {
                 )}
             </div>
 
-            {/* Detail Modal */}
-            {isModalOpen && selectedRegistration && (
-                <RegistrationDetailModal
-                    registration={selectedRegistration}
-                    onClose={closeModal}
-                />
-            )}
         </div>
     );
 }
 
-// Registration Detail Modal Component
-function RegistrationDetailModal({ registration, onClose }) {
-    const getStatusIcon = (status) => {
-        switch (status) {
-            case 'YES':
-                return <CheckCircle className="w-5 h-5 text-green-500" />;
-            case 'NO':
-                return <XCircle className="w-5 h-5 text-red-500" />;
-            case 'MAYBE':
-                return <HelpCircle className="w-5 h-5 text-yellow-500" />;
-            default:
-                return null;
-        }
-    };
-
-    const getStatusColor = (status) => {
-        switch (status) {
-            case 'YES':
-                return 'bg-green-100 text-green-800 border-green-300';
-            case 'NO':
-                return 'bg-red-100 text-red-800 border-red-300';
-            case 'MAYBE':
-                return 'bg-yellow-100 text-yellow-800 border-yellow-300';
-            default:
-                return 'bg-gray-100 text-gray-800 border-gray-300';
-        }
-    };
-
-    return (
-        <div 
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
-            onClick={onClose}
-        >
-            <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-                onClick={(e) => e.stopPropagation()}
-            >
-                {/* Header */}
-                <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-6 rounded-t-2xl flex items-center justify-between z-10">
-                    <div>
-                        <h2 className="text-2xl font-bold">Registration Details</h2>
-                        <p className="text-blue-100 text-sm mt-1">ID: #{registration.id}</p>
-                    </div>
-                    <button
-                        onClick={onClose}
-                        className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full transition-colors"
-                    >
-                        <X className="w-6 h-6" />
-                    </button>
-                </div>
-
-                {/* Content */}
-                <div className="p-6 space-y-6">
-                    {/* Personal Information */}
-                    <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-6 border border-blue-100">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                            <User className="w-5 h-5 text-blue-600" />
-                            Personal Information
-                        </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label className="text-sm font-medium text-gray-600">Full Name</label>
-                                <p className="text-gray-900 font-semibold mt-1">{registration.fullName}</p>
-                            </div>
-                            <div>
-                                <label className="text-sm font-medium text-gray-600">Company Name</label>
-                                <p className="text-gray-900 font-semibold mt-1 flex items-center gap-2">
-                                    <Building2 className="w-4 h-4 text-gray-500" />
-                                    {registration.companyName}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Contact Information */}
-                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                            <Phone className="w-5 h-5 text-purple-600" />
-                            Contact Information
-                        </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label className="text-sm font-medium text-gray-600">WhatsApp Number</label>
-                                <p className="text-gray-900 font-semibold mt-1 flex items-center gap-2">
-                                    <Phone className="w-4 h-4 text-gray-500" />
-                                    <a 
-                                        href={`https://wa.me/${registration.whatsappNumber.replace(/[^0-9]/g, '')}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-blue-600 hover:underline"
-                                    >
-                                        {registration.whatsappNumber}
-                                    </a>
-                                </p>
-                            </div>
-                            <div>
-                                <label className="text-sm font-medium text-gray-600">Email Address</label>
-                                <p className="text-gray-900 font-semibold mt-1 flex items-center gap-2">
-                                    <Mail className="w-4 h-4 text-gray-500" />
-                                    <a 
-                                        href={`mailto:${registration.email}`}
-                                        className="text-blue-600 hover:underline"
-                                    >
-                                        {registration.email}
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Event Preferences */}
-                    <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-6 border border-orange-100">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                            <UtensilsCrossed className="w-5 h-5 text-orange-600" />
-                            Event Preferences
-                        </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label className="text-sm font-medium text-gray-600">Food Restriction</label>
-                                <p className="text-gray-900 font-semibold mt-1">{registration.foodRestriction}</p>
-                            </div>
-                            <div>
-                                <label className="text-sm font-medium text-gray-600">Allergies</label>
-                                <p className="text-gray-900 font-semibold mt-1 flex items-center gap-2">
-                                    {registration.allergies === 'YES' ? (
-                                        <AlertCircle className="w-4 h-4 text-red-500" />
-                                    ) : (
-                                        <CheckCircle className="w-4 h-4 text-green-500" />
-                                    )}
-                                    {registration.allergies}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Attendance Information */}
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                            <UsersIcon className="w-5 h-5 text-green-600" />
-                            Attendance Information
-                        </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label className="text-sm font-medium text-gray-600">Confirmation Status</label>
-                                <div className="mt-2">
-                                    <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 font-semibold ${getStatusColor(registration.confirmationAttendance)}`}>
-                                        {getStatusIcon(registration.confirmationAttendance)}
-                                        {registration.confirmationAttendance}
-                                    </span>
-                                </div>
-                            </div>
-                            <div>
-                                <label className="text-sm font-medium text-gray-600">Number of Guests</label>
-                                <p className="text-gray-900 font-semibold mt-1 flex items-center gap-2 text-2xl">
-                                    <UsersIcon className="w-5 h-5 text-gray-500" />
-                                    {registration.numberOfPeople} {registration.numberOfPeople === 1 ? 'person' : 'people'}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Timestamp */}
-                    <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                            <Clock className="w-4 h-4" />
-                            <span className="font-medium">Registered on:</span>
-                            <span>{new Date(registration.createdAt).toLocaleString('en-US', {
-                                weekday: 'long',
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                            })}</span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Footer */}
-                <div className="sticky bottom-0 bg-gray-50 p-4 rounded-b-2xl flex justify-end gap-3 border-t border-gray-200">
-                    <button
-                        onClick={onClose}
-                        className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-medium transition-colors"
-                    >
-                        Close
-                    </button>
-                </div>
-            </motion.div>
-        </div>
-    );
-}

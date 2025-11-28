@@ -94,5 +94,51 @@ router.post('/', async (req, res) => {
   }
 });
 
+/**
+ * GET /api/registrations/:id
+ * Get registration detail by ID (public endpoint)
+ */
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await pool.query(
+      'SELECT * FROM registrations WHERE id = $1',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Registration not found'
+      });
+    }
+
+    const reg = result.rows[0];
+    
+    res.json({
+      success: true,
+      data: {
+        id: reg.id,
+        fullName: reg.full_name,
+        companyName: reg.company_name,
+        whatsappNumber: reg.whatsapp_number,
+        email: reg.email,
+        foodRestriction: reg.food_restriction,
+        allergies: reg.allergies,
+        confirmationAttendance: reg.confirmation_attendance,
+        numberOfPeople: reg.number_of_people,
+        createdAt: reg.created_at
+      }
+    });
+  } catch (error) {
+    console.error('Fetch registration error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch registration'
+    });
+  }
+});
+
 module.exports = router;
 

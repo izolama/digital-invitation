@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import Confetti from 'react-confetti';
+import QRCode from 'react-qr-code';
 import {
     User,
     Building2,
@@ -9,7 +10,10 @@ import {
     AlertCircle,
     CheckCircle2,
     Users,
-    Send
+    Send,
+    X,
+    CheckCircle,
+    Download
 } from 'lucide-react'
 import { useState } from 'react';
 import config from '@/config/config';
@@ -19,6 +23,9 @@ import BottomOrnaments from '@/components/BottomOrnaments';
 export default function Wishes() {
     const [showConfetti, setShowConfetti] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showQRModal, setShowQRModal] = useState(false);
+    const [registrationId, setRegistrationId] = useState(null);
+    const [registrationUrl, setRegistrationUrl] = useState('');
     const [formData, setFormData] = useState({
         fullName: '',
         companyName: '',
@@ -74,6 +81,19 @@ export default function Wishes() {
             const data = await response.json();
             console.log('Registration successful:', data);
 
+            // Get registration ID from response
+            const regId = data.data?.id || data.id;
+            if (regId) {
+                // Generate URL for registration detail
+                const baseUrl = window.location.origin;
+                const detailUrl = `${baseUrl}/registration/${regId}`;
+                setRegistrationId(regId);
+                setRegistrationUrl(detailUrl);
+                
+                // Show QR code modal
+                setShowQRModal(true);
+            }
+
             // Show success feedback
             setShowConfetti(true);
             setTimeout(() => setShowConfetti(false), 3000);
@@ -89,9 +109,6 @@ export default function Wishes() {
                 confirmationAttendance: '',
                 numberOfPeople: '1'
             });
-
-            // Optional: Show success message to user
-            alert('Thank you for registering! We look forward to seeing you at the event.');
 
         } catch (error) {
             console.error('Submission error:', error);
@@ -408,6 +425,80 @@ export default function Wishes() {
                 </motion.div>
             </div>
             <BottomOrnaments />
+
+            {/* QR Code Modal */}
+            {showQRModal && registrationUrl && (
+                <div 
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
+                    onClick={() => setShowQRModal(false)}
+                >
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Header */}
+                        <div className="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 className="text-2xl font-bold text-gray-800">Registration Successful!</h3>
+                                <p className="text-gray-600 text-sm mt-1">Scan QR code to view your registration</p>
+                            </div>
+                            <button
+                                onClick={() => setShowQRModal(false)}
+                                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                            >
+                                <X className="w-6 h-6 text-gray-600" />
+                            </button>
+                        </div>
+
+                        {/* QR Code */}
+                        <div className="flex flex-col items-center space-y-4 mb-6">
+                            <div className="bg-white p-4 rounded-xl border-2 border-gray-200">
+                                <QRCode
+                                    value={registrationUrl}
+                                    size={256}
+                                    level="H"
+                                    includeMargin={true}
+                                />
+                            </div>
+                            <div className="text-center">
+                                <p className="text-sm text-gray-600 mb-2">Registration ID: #{registrationId}</p>
+                                <a
+                                    href={registrationUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-600 hover:underline text-sm break-all"
+                                >
+                                    {registrationUrl}
+                                </a>
+                            </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => {
+                                    navigator.clipboard.writeText(registrationUrl);
+                                    alert('Link copied to clipboard!');
+                                }}
+                                className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                            >
+                                <Download className="w-4 h-4" />
+                                Copy Link
+                            </button>
+                            <button
+                                onClick={() => setShowQRModal(false)}
+                                className="flex-1 px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                            >
+                                <CheckCircle className="w-4 h-4" />
+                                Done
+                            </button>
+                        </div>
+                    </motion.div>
+                </div>
+            )}
         </section>
     )
 }

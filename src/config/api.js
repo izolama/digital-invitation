@@ -21,6 +21,7 @@ const API_BASE_URL = getApiBaseUrl();
 export const API_ENDPOINTS = {
   // Public endpoints
   REGISTRATIONS: `${API_BASE_URL}/api/registrations`,
+  REGISTRATION_DETAIL: (id) => `${API_BASE_URL}/api/registrations/${id}`,
   
   // Admin endpoints
   ADMIN_LOGIN: `${API_BASE_URL}/api/admin/login`,

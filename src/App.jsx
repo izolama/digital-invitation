@@ -23,6 +23,7 @@ import MainContent from '@/pages/MainContent';
 import LandingPage from '@/pages/LandingPage';
 import Login from '@/pages/admin/Login';
 import Dashboard from '@/pages/admin/Dashboard';
+import RegistrationDetail from '@/pages/RegistrationDetail';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import config from '@/config/config';
@@ -91,6 +92,9 @@ function App() {
             )}
           </AnimatePresence>
         } />
+
+        {/* Public Registration Detail */}
+        <Route path="/registration/:id" element={<RegistrationDetail />} />
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={<Login />} />
