@@ -15,7 +15,7 @@ import {
     CheckCircle,
     Download
 } from 'lucide-react'
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import config from '@/config/config';
 import { API_ENDPOINTS } from '@/config/api';
 import BottomOrnaments from '@/components/BottomOrnaments';
@@ -26,6 +26,7 @@ export default function Wishes() {
     const [showQRModal, setShowQRModal] = useState(false);
     const [registrationId, setRegistrationId] = useState(null);
     const [registrationUrl, setRegistrationUrl] = useState('');
+    const qrCodeRef = useRef(null);
     const [formData, setFormData] = useState({
         fullName: '',
         companyName: '',
@@ -80,25 +81,34 @@ export default function Wishes() {
 
             const data = await response.json();
             console.log('Registration successful:', data);
+            console.log('Response data structure:', JSON.stringify(data, null, 2));
 
             // Get registration ID from response
             const regId = data.data?.id || data.id;
+            console.log('Registration ID extracted:', regId);
+            
             if (regId) {
                 // Generate URL for registration detail
                 const baseUrl = window.location.origin;
                 const detailUrl = `${baseUrl}/registration/${regId}`;
+                console.log('Registration URL:', detailUrl);
+                
                 setRegistrationId(regId);
                 setRegistrationUrl(detailUrl);
                 
                 // Show QR code modal
+                console.log('Showing QR modal...');
                 setShowQRModal(true);
+            } else {
+                console.error('No registration ID in response:', data);
+                alert('Registration successful, but could not generate QR code. Please contact support.');
             }
 
             // Show success feedback
             setShowConfetti(true);
             setTimeout(() => setShowConfetti(false), 3000);
 
-            // Reset form after successful submission
+            // Reset form after successful submission (but keep modal open)
             setFormData({
                 fullName: '',
                 companyName: '',
@@ -109,6 +119,8 @@ export default function Wishes() {
                 confirmationAttendance: '',
                 numberOfPeople: '1'
             });
+            
+            setIsSubmitting(false);
 
         } catch (error) {
             console.error('Submission error:', error);
@@ -117,6 +129,8 @@ export default function Wishes() {
                 stack: error.stack,
                 endpoint: API_ENDPOINTS.REGISTRATIONS
             });
+            
+            setIsSubmitting(false);
 
             // More specific error message
             let errorMsg = 'Sorry, there was an error submitting your registration.';
@@ -133,6 +147,65 @@ export default function Wishes() {
             setIsSubmitting(false);
         }
     };
+
+    const downloadQRCode = () => {
+        try {
+            // Get the SVG element
+            const svgElement = qrCodeRef.current?.querySelector('svg');
+            if (!svgElement) {
+                alert('QR code not found. Please try again.');
+                return;
+            }
+
+            // Create a canvas to render the SVG
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            // Create an image to load the SVG
+            const img = new Image();
+            img.onload = () => {
+                // Set canvas size with padding
+                const padding = 40;
+                canvas.width = img.width + padding * 2;
+                canvas.height = img.height + padding * 2;
+
+                // Fill white background
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Draw the QR code image
+                ctx.drawImage(img, padding, padding);
+
+                // Convert canvas to blob and download
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        const downloadUrl = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = downloadUrl;
+                        link.download = `registration-qr-${registrationId || 'code'}.png`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(downloadUrl);
+                    }
+                }, 'image/png');
+
+                URL.revokeObjectURL(url);
+            };
+            img.onerror = () => {
+                alert('Failed to generate QR code image. Please try again.');
+                URL.revokeObjectURL(url);
+            };
+            img.src = url;
+        } catch (error) {
+            console.error('Error downloading QR code:', error);
+            alert('Failed to download QR code. Please try again.');
+        }
+    };
+
     return (
         <section id="wishes" className="min-h-screen relative overflow-hidden ">
             {showConfetti && <Confetti recycle={false} numberOfPieces={500} />}
@@ -427,7 +500,7 @@ export default function Wishes() {
             <BottomOrnaments />
 
             {/* QR Code Modal */}
-            {showQRModal && registrationUrl && (
+            {showQRModal && registrationId && registrationUrl && (
                 <div 
                     className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
                     onClick={() => setShowQRModal(false)}
@@ -455,7 +528,10 @@ export default function Wishes() {
 
                         {/* QR Code */}
                         <div className="flex flex-col items-center space-y-4 mb-6">
-                            <div className="bg-white p-4 rounded-xl border-2 border-gray-200">
+                            <div 
+                                ref={qrCodeRef}
+                                className="bg-white p-4 rounded-xl border-2 border-gray-200"
+                            >
                                 <QRCode
                                     value={registrationUrl}
                                     size={256}
@@ -477,22 +553,30 @@ export default function Wishes() {
                         </div>
 
                         {/* Actions */}
-                        <div className="flex gap-3">
-                            <button
-                                onClick={() => {
-                                    navigator.clipboard.writeText(registrationUrl);
-                                    alert('Link copied to clipboard!');
-                                }}
-                                className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
-                            >
-                                <Download className="w-4 h-4" />
-                                Copy Link
-                            </button>
+                        <div className="flex flex-col gap-3">
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={downloadQRCode}
+                                    className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                                >
+                                    <Download className="w-4 h-4" />
+                                    Download QR
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(registrationUrl);
+                                        alert('Link copied to clipboard!');
+                                    }}
+                                    className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                                >
+                                    <CheckCircle className="w-4 h-4" />
+                                    Copy Link
+                                </button>
+                            </div>
                             <button
                                 onClick={() => setShowQRModal(false)}
-                                className="flex-1 px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                                className="w-full px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
                             >
-                                <CheckCircle className="w-4 h-4" />
                                 Done
                             </button>
                         </div>

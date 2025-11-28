@@ -9,11 +9,11 @@ const getApiBaseUrl = () => {
   
   // In development, use IP address
   if (import.meta.env.DEV) {
-    return 'https://backend-digital-invitation.nahsbyte.my.id';
+    return 'http://192.168.101.100:5001';
   }
   
   // Production: Use IP address
-  return 'https://backend-digital-invitation.nahsbyte.my.id';
+  return 'http://192.168.101.100:5001';
 };
 
 const API_BASE_URL = getApiBaseUrl();

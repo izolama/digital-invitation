@@ -80,6 +80,9 @@ function App() {
       </Helmet>
 
       <Routes>
+        {/* Public Registration Detail - Must be before catch-all */}
+        <Route path="/registration/:id" element={<RegistrationDetail />} />
+
         {/* Public Routes */}
         <Route path="/" element={
           <AnimatePresence mode='wait'>
@@ -92,9 +95,6 @@ function App() {
             )}
           </AnimatePresence>
         } />
-
-        {/* Public Registration Detail */}
-        <Route path="/registration/:id" element={<RegistrationDetail />} />
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={<Login />} />
@@ -110,7 +110,7 @@ function App() {
         {/* Redirect /admin to /admin/login */}
         <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
 
-        {/* 404 - Redirect to home */}
+        {/* 404 - Redirect to home (but not for /registration/:id) */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </HelmetProvider>

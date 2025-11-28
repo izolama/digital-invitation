@@ -31,6 +31,9 @@ export default function RegistrationDetail() {
     const fetchRegistration = async () => {
         try {
             setLoading(true);
+            console.log('Fetching registration with ID:', id);
+            console.log('API endpoint:', API_ENDPOINTS.REGISTRATION_DETAIL(id));
+            
             // Use public endpoint
             const response = await fetch(API_ENDPOINTS.REGISTRATION_DETAIL(id), {
                 headers: {
@@ -38,16 +41,22 @@ export default function RegistrationDetail() {
                 }
             });
 
+            console.log('Response status:', response.status);
+            console.log('Response ok:', response.ok);
+
             if (!response.ok) {
-                throw new Error('Failed to fetch registration');
+                const errorData = await response.json().catch(() => ({}));
+                console.error('Error response:', errorData);
+                throw new Error(errorData.error || `Failed to fetch registration: ${response.status}`);
             }
 
             const result = await response.json();
+            console.log('Registration data:', result);
             
             if (result.success && result.data) {
                 setRegistration(result.data);
             } else {
-                throw new Error('Registration not found');
+                throw new Error(result.error || 'Registration not found');
             }
         } catch (err) {
             console.error('Fetch error:', err);
