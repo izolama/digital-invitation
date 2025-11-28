@@ -23,6 +23,7 @@ import MainContent from '@/pages/MainContent';
 import LandingPage from '@/pages/LandingPage';
 import Login from '@/pages/admin/Login';
 import Dashboard from '@/pages/admin/Dashboard';
+import RegistrationDetail from '@/pages/RegistrationDetail';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import config from '@/config/config';
@@ -102,6 +103,7 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        <Route path="/registration/:id" element={<RegistrationDetail />} />
         
         {/* Redirect /admin to /admin/login */}
         <Route path="/admin" element={<Navigate to="/admin/login" replace />} />

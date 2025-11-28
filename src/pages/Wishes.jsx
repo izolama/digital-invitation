@@ -11,10 +11,11 @@ import {
     Users,
     Send
 } from 'lucide-react'
-import { useState } from 'react';
 import config from '@/config/config';
 import { API_ENDPOINTS } from '@/config/api';
 import BottomOrnaments from '@/components/BottomOrnaments';
+import QRCode from 'qrcode';
+import { useState } from 'react';
 
 export default function Wishes() {
     const [showConfetti, setShowConfetti] = useState(false);
@@ -29,6 +30,7 @@ export default function Wishes() {
         confirmationAttendance: '',
         numberOfPeople: '1'
     });
+    const [qrData, setQrData] = useState(null);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -73,6 +75,13 @@ export default function Wishes() {
 
             const data = await response.json();
             console.log('Registration successful:', data);
+
+            const detailLink = `${window.location.origin}/registration/${data.data.id}`;
+            const dataUrl = await QRCode.toDataURL(detailLink, {
+                margin: 1,
+                width: 240
+            });
+            setQrData({ id: data.data.id, dataUrl, detailLink });
 
             // Show success feedback
             setShowConfetti(true);
@@ -405,6 +414,44 @@ export default function Wishes() {
                             )}
                         </motion.button>
                     </form>
+
+                    {qrData && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="mt-8 bg-white/90 border border-primary/20 rounded-2xl shadow-lg p-6 text-center space-y-3"
+                        >
+                            <h3 className="text-xl font-semibold text-secondary">Scan &amp; Save Registration QR</h3>
+                            <p className="text-secondary text-sm">
+                                QR ini berisi tautan detail registrasi Anda. Simpan atau unduh untuk ditunjukkan saat acara.
+                            </p>
+                            <div className="flex justify-center">
+                                <img
+                                    src={qrData.dataUrl}
+                                    alt="Registration QR"
+                                    className="w-48 h-48 object-contain"
+                                />
+                            </div>
+                            <div className="flex items-center justify-center gap-3">
+                                <a
+                                    href={qrData.dataUrl}
+                                    download={`registration-${qrData.id}.png`}
+                                    className="px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition"
+                                >
+                                    Download QR
+                                </a>
+                                <a
+                                    href={qrData.detailLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="px-4 py-2 border border-primary text-primary rounded-lg font-medium hover:bg-primary/10 transition"
+                                >
+                                    Buka Link
+                                </a>
+                            </div>
+                        </motion.div>
+                    )}
                 </motion.div>
             </div>
             <BottomOrnaments />
