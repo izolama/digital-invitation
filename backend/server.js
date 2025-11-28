@@ -156,7 +156,8 @@ app.use((req, res) => {
 
 // Global error handler
 app.use((err, req, res, next) => {
-  console.error('Error:', err);
+  console.error('Global error handler:', err);
+  console.error('Error stack:', err.stack);
   
   // Ensure CORS headers are set even on errors
   const origin = req.headers.origin;
@@ -169,10 +170,25 @@ app.use((err, req, res, next) => {
     res.header('Access-Control-Allow-Credentials', 'true');
   }
   
-  res.status(err.status || 500).json({
-    success: false,
-    error: err.message || 'Internal server error'
-  });
+  // Don't send error if response already sent
+  if (!res.headersSent) {
+    res.status(err.status || 500).json({
+      success: false,
+      error: err.message || 'Internal server error'
+    });
+  }
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  console.error('Stack:', error.stack);
+  // Don't exit, let the process continue
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
 // Start server

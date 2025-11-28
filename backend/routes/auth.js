@@ -12,6 +12,8 @@ router.post('/admin/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    console.log('Login attempt:', { email, hasPassword: !!password });
+
     // Validation
     if (!email || !password) {
       return res.status(400).json({
@@ -36,9 +38,12 @@ router.post('/admin/login', async (req, res) => {
     const user = result.rows[0];
 
     // Verify password
+    console.log('Verifying password for user:', user.email);
     const validPassword = await bcrypt.compare(password, user.password_hash);
+    console.log('Password valid:', validPassword);
 
     if (!validPassword) {
+      console.log('Invalid password for user:', user.email);
       return res.status(401).json({
         success: false,
         error: 'Invalid credentials'
@@ -74,6 +79,15 @@ router.post('/admin/login', async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
+    console.error('Error stack:', error.stack);
+    
+    // Ensure CORS headers on error
+    const origin = req.headers.origin;
+    if (origin) {
+      res.header('Access-Control-Allow-Origin', origin);
+      res.header('Access-Control-Allow-Credentials', 'true');
+    }
+    
     res.status(500).json({
       success: false,
       error: 'Internal server error'
