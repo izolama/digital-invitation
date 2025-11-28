@@ -7,13 +7,13 @@ const getApiBaseUrl = () => {
     return import.meta.env.VITE_API_BASE_URL;
   }
   
-  // In development, use localhost:5001
+  // In development, use IP address
   if (import.meta.env.DEV) {
-    return 'http://localhost:5001';
+    return 'http://192.168.101.100:5001';
   }
   
-  // Production: Use localhost:5001 (same server)
-  return 'http://localhost:5001';
+  // Production: Use IP address
+  return 'http://192.168.101.100:5001';
 };
 
 const API_BASE_URL = getApiBaseUrl();

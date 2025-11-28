@@ -39,16 +39,57 @@ router.post('/admin/login', async (req, res) => {
 
     // Verify password
     console.log('Verifying password for user:', user.email);
-    const validPassword = await bcrypt.compare(password, user.password_hash);
-    console.log('Password valid:', validPassword);
-
-    if (!validPassword) {
-      console.log('Invalid password for user:', user.email);
-      return res.status(401).json({
+    console.log('Password hash from DB:', user.password_hash ? 'exists' : 'missing');
+    console.log('Hash length:', user.password_hash?.length || 0);
+    console.log('Hash starts with:', user.password_hash?.substring(0, 7) || 'N/A');
+    
+    // Validate hash format
+    if (!user.password_hash || user.password_hash.length < 50) {
+      console.error('Invalid password hash format');
+      return res.status(500).json({
         success: false,
-        error: 'Invalid credentials'
+        error: 'Invalid password hash in database'
       });
     }
+    
+    // Add timeout for bcrypt.compare (max 5 seconds)
+    let validPassword = false;
+    try {
+      const comparePromise = bcrypt.compare(password, user.password_hash);
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Password verification timeout')), 5000)
+      );
+      
+      validPassword = await Promise.race([comparePromise, timeoutPromise]);
+      console.log('Password valid:', validPassword);
+      
+      if (!validPassword) {
+        console.log('Invalid password for user:', user.email);
+        return res.status(401).json({
+          success: false,
+          error: 'Invalid credentials'
+        });
+      }
+    } catch (bcryptError) {
+      console.error('Bcrypt error:', bcryptError.message);
+      console.error('Bcrypt error stack:', bcryptError.stack);
+      
+      // Ensure CORS headers on error
+      const origin = req.headers.origin;
+      if (origin) {
+        res.header('Access-Control-Allow-Origin', origin);
+        res.header('Access-Control-Allow-Credentials', 'true');
+      }
+      
+      return res.status(500).json({
+        success: false,
+        error: bcryptError.message === 'Password verification timeout' 
+          ? 'Password verification timed out' 
+          : 'Password verification failed'
+      });
+    }
+
+    // Password already verified above, continue with login
 
     // Update last login
     await pool.query(

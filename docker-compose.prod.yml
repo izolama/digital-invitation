@@ -11,7 +11,7 @@ services:
       - "80:5173"
     environment:
       - NODE_ENV=production
-      - VITE_API_BASE_URL=http://localhost:5001
+      - VITE_API_BASE_URL=http://192.168.101.100:5001
     networks:
       - shared-network
     labels:
