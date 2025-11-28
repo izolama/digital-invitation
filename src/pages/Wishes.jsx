@@ -106,13 +106,17 @@ export default function Wishes() {
                 setRegistrationId(regIdString);
                 setRegistrationUrl(detailUrl);
                 
-                // Use setTimeout to ensure state updates are processed
-                setTimeout(() => {
-                    console.log('Showing QR modal...');
-                    console.log('Current registrationId:', regIdString);
-                    console.log('Current registrationUrl:', detailUrl);
+                // Force modal to show - use immediate update
+                console.log('Setting states for QR modal...');
+                console.log('registrationId:', regIdString);
+                console.log('registrationUrl:', detailUrl);
+                
+                // Show modal immediately after state is set
+                // Use a small delay to ensure React has processed the state updates
+                requestAnimationFrame(() => {
+                    console.log('Showing QR modal via requestAnimationFrame...');
                     setShowQRModal(true);
-                }, 100);
+                });
             } else {
                 console.error('No registration ID in response:', data);
                 alert('Registration successful, but could not generate QR code. Please contact support.');
@@ -164,10 +168,20 @@ export default function Wishes() {
 
     // Debug: Log state changes for QR modal
     useEffect(() => {
+        console.log('QR Modal State Changed:');
+        console.log('  showQRModal:', showQRModal);
+        console.log('  registrationId:', registrationId);
+        console.log('  registrationUrl:', registrationUrl);
+        
         if (showQRModal) {
-            console.log('QR Modal should be visible');
-            console.log('registrationId:', registrationId);
-            console.log('registrationUrl:', registrationUrl);
+            console.log('✅ QR Modal should be visible NOW!');
+            // Force a re-render to ensure modal appears
+            const modalElement = document.querySelector('[data-qr-modal]');
+            if (modalElement) {
+                console.log('✅ Modal element found in DOM');
+            } else {
+                console.warn('⚠️ Modal element NOT found in DOM');
+            }
         }
     }, [showQRModal, registrationId, registrationUrl]);
 
@@ -527,8 +541,10 @@ export default function Wishes() {
             {/* QR Code Modal */}
             {showQRModal && (
                 <div 
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
+                    data-qr-modal="true"
+                    className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
                     onClick={() => setShowQRModal(false)}
+                    style={{ zIndex: 9999, position: 'fixed' }}
                 >
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
