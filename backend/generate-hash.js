@@ -1,7 +1,7 @@
 // Generate Bcrypt Hash for Password
 // Run: node generate-hash.js [password]
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const password = process.argv[2] || 'admin123';
 const rounds = 10;

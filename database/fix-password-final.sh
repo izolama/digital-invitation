@@ -30,11 +30,11 @@ fi
 
 echo "Backend directory: $BACKEND_DIR"
 
-# Install bcrypt if needed
-if [ ! -d "$BACKEND_DIR/node_modules/bcrypt" ]; then
-    echo "Installing bcrypt..."
+# Install bcryptjs if needed
+if [ ! -d "$BACKEND_DIR/node_modules/bcryptjs" ]; then
+    echo "Installing bcryptjs..."
     cd "$BACKEND_DIR"
-    npm install bcrypt 2>/dev/null
+    npm install bcryptjs 2>/dev/null
     cd - > /dev/null
 fi
 
@@ -43,7 +43,7 @@ echo "Generating hash with backend bcrypt..."
 cd "$BACKEND_DIR"
 
 HASH=$(node -e "
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 bcrypt.hash('$PASSWORD', 10)
     .then(hash => {
         console.log(hash);
@@ -70,7 +70,7 @@ echo ""
 echo "Verifying hash..."
 cd "$BACKEND_DIR"
 VERIFY=$(node -e "
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 bcrypt.compare('$PASSWORD', '$HASH')
     .then(result => {
         console.log(result ? 'true' : 'false');

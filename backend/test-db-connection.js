@@ -2,6 +2,7 @@
 // Run: node test-db-connection.js
 
 const pool = require('./config/database');
+// Note: This file doesn't use bcrypt, but if it did, use bcryptjs
 
 async function testConnection() {
   console.log('Testing database connection...');

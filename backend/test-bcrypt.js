@@ -1,7 +1,7 @@
 // Test Bcrypt Performance
 // Run: node test-bcrypt.js
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const password = 'admin123';
 const hash = '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
