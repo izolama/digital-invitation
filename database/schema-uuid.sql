@@ -1,11 +1,6 @@
--- Digital Invitation Database Schema
--- PostgreSQL Database Setup Script
--- Created: 2025-11-26
--- Updated: 2025-11-28 (UUID support)
--- Updated for existing PostgreSQL with user: postgres
-
--- Note: This script assumes you're already connected to digital_invitation database
--- If running manually: psql -U postgres -d digital_invitation -f schema.sql
+-- Digital Invitation Database Schema (UUID Version)
+-- PostgreSQL Database Setup Script with UUID
+-- Created: 2025-11-28
 
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -14,7 +9,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 DROP TABLE IF EXISTS registrations CASCADE;
 DROP TABLE IF EXISTS admin_users CASCADE;
 
--- Create Admin Users Table
+-- Create Admin Users Table (keep SERIAL for admin, or change to UUID if needed)
 CREATE TABLE admin_users (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -27,7 +22,7 @@ CREATE TABLE admin_users (
     last_login TIMESTAMP
 );
 
--- Create Registrations Table (with UUID)
+-- Create Registrations Table with UUID
 CREATE TABLE registrations (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     full_name VARCHAR(255) NOT NULL,
@@ -74,59 +69,16 @@ CREATE TRIGGER update_registrations_updated_at
     EXECUTE FUNCTION update_updated_at_column();
 
 -- Insert default admin user
--- Password: admin123 (bcrypt hashed, 10 rounds)
--- IMPORTANT: Change this password in production!
--- 
--- To update password, run:
---   ./update-password-simple.sh
---   OR
---   ./update-admin-password.sh [new_password]
+-- Password: admin123 (bcryptjs hashed, 10 rounds)
 INSERT INTO admin_users (name, email, password_hash) 
 VALUES (
     'Admin', 
     'admin@krakatau.com', 
-    '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'
+    '$2b$10$pj/s6RM9.4rcngH3c.o61ekKSQjCHZS6ZNoGzpT6pyhLapoXTQXkC'
 ) ON CONFLICT (email) DO UPDATE 
 SET password_hash = EXCLUDED.password_hash;
 
--- Insert sample registrations for testing (optional)
-INSERT INTO registrations (
-    full_name, company_name, whatsapp_number, email, 
-    food_restriction, allergies, confirmation_attendance, number_of_people,
-    ip_address, user_agent
-) VALUES 
-    (
-        'John Doe', 'PT ABC Industries', '08123456789', 'john@abc.com',
-        'NON VEGAN', 'NO', 'YES', 2,
-        '192.168.1.1', 'Mozilla/5.0 (Sample Data)'
-    ),
-    (
-        'Jane Smith', 'PT XYZ Corporation', '08198765432', 'jane@xyz.com',
-        'VEGAN', 'YES', 'YES', 1,
-        '192.168.1.2', 'Mozilla/5.0 (Sample Data)'
-    ),
-    (
-        'Bob Johnson', 'PT Steel Works', '08156789012', 'bob@steel.com',
-        'NO RESTRICTION', 'NO', 'MAYBE', 3,
-        '192.168.1.3', 'Mozilla/5.0 (Sample Data)'
-    ),
-    (
-        'Alice Williams', 'PT Tech Solutions', '08145678901', 'alice@tech.com',
-        'VEGETARIAN', 'NO', 'YES', 1,
-        '192.168.1.4', 'Mozilla/5.0 (Sample Data)'
-    ),
-    (
-        'Charlie Brown', 'PT Manufacturing', '08134567890', 'charlie@manu.com',
-        'NON VEGAN', 'YES', 'NO', 0,
-        '192.168.1.5', 'Mozilla/5.0 (Sample Data)'
-    );
-
--- Permissions are already set for postgres user
--- No additional grants needed
-
 -- Display success message
-SELECT 'Database schema created successfully!' as status;
+SELECT 'Database schema created successfully with UUID!' as status;
 SELECT 'Default admin user created: admin@krakatau.com / admin123' as info;
-SELECT 'Sample data inserted: ' || COUNT(*) || ' registrations' as sample_data 
-FROM registrations;
 
