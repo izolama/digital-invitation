@@ -7,13 +7,13 @@ const getApiBaseUrl = () => {
     return import.meta.env.VITE_API_BASE_URL;
   }
   
-  // In development, use proxy (empty string = same origin)
+  // In development, use localhost:5001
   if (import.meta.env.DEV) {
-    return ''; // Vite proxy will handle /api requests
+    return 'http://localhost:5001';
   }
   
-  // Production: Use dedicated backend subdomain
-  return 'https://backend-digital-invitation.nahsbyte.my.id';
+  // Production: Use localhost:5001 (same server)
+  return 'http://localhost:5001';
 };
 
 const API_BASE_URL = getApiBaseUrl();
