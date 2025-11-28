@@ -46,6 +46,7 @@ services:
       - JWT_SECRET=${JWT_SECRET:-change-this-in-production-use-at-least-32-characters-minimum}
       - JWT_EXPIRES_IN=24h
       - CORS_ORIGIN=https://digital-invitation.nahsbyte.my.id,http://digital-invitation.nahsbyte.my.id,http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000
+      - ENABLE_RATE_LIMIT=false
     networks:
       - shared-network
     extra_hosts:

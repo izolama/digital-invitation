@@ -84,24 +84,41 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('combined'));
 }
 
-// Rate limiting
-// keyGenerator: Use connection IP directly, ignore X-Forwarded-For
-const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
-  message: {
-    success: false,
-    error: 'Too many requests, please try again later'
-  },
-  // Use connection IP directly, don't trust proxy headers
-  keyGenerator: (req) => {
-    return req.ip || req.connection.remoteAddress || 'unknown';
-  },
-  // Skip X-Forwarded-For validation
-  standardHeaders: true,
-  legacyHeaders: false
-});
-app.use('/api/', limiter);
+// Rate limiting - Temporarily disabled to fix 502 error
+// Will re-enable after fixing X-Forwarded-For issue
+const enableRateLimit = process.env.ENABLE_RATE_LIMIT !== 'false';
+
+if (enableRateLimit) {
+  const limiter = rateLimit({
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
+    max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
+    message: {
+      success: false,
+      error: 'Too many requests, please try again later'
+    },
+    // Simple key generator - use connection IP
+    keyGenerator: (req) => {
+      // Use connection IP, don't rely on headers
+      return req.connection?.remoteAddress || 
+             req.socket?.remoteAddress || 
+             'unknown';
+    },
+    standardHeaders: true,
+    legacyHeaders: false
+  });
+  
+  // Apply with error handling
+  app.use('/api/', (req, res, next) => {
+    try {
+      return limiter(req, res, next);
+    } catch (error) {
+      console.error('Rate limiter error (continuing):', error.message);
+      return next();
+    }
+  });
+} else {
+  console.log('⚠️  Rate limiting is disabled');
+}
 
 // Health check endpoint
 app.get('/health', (req, res) => {
