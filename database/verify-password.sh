@@ -64,7 +64,9 @@ if [ -z "$CURRENT_HASH" ]; then
     exit 1
 fi
 
-echo "Current hash: ${CURRENT_HASH:0:20}..."
+# Use cut instead of bash substring for compatibility
+HASH_PREVIEW=$(echo "$CURRENT_HASH" | cut -c1-20)
+echo "Current hash: ${HASH_PREVIEW}..."
 echo ""
 
 # Verify current hash
