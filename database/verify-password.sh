@@ -78,7 +78,7 @@ const result = bcrypt.compareSync('$PASSWORD', hash);
 console.log(result ? 'true' : 'false');
 ")
 
-if [ "$CURRENT_VERIFY" == "true" ]; then
+if [ "$CURRENT_VERIFY" = "true" ]; then
     echo "✅ Current password hash is valid!"
     echo ""
     echo "Password is working correctly."
