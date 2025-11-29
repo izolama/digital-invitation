@@ -7,10 +7,17 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json package-lock.json* ./
 
 # Install dependencies (including devDependencies for build)
-RUN npm ci && npm cache clean --force
+# Check if package-lock.json exists and is valid, otherwise use npm install
+RUN if [ -f package-lock.json ] && [ -s package-lock.json ]; then \
+      echo "Using npm ci with package-lock.json"; \
+      npm ci && npm cache clean --force; \
+    else \
+      echo "Warning: package-lock.json not found or empty, using npm install"; \
+      npm install && npm cache clean --force; \
+    fi
 
 # Copy source code
 COPY . .
