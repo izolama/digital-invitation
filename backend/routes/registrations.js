@@ -168,5 +168,40 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+/**
+ * GET /api/registrations/:id
+ * Public read-only registration detail (for QR scans)
+ */
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query(
+      `SELECT id, full_name, company_name, whatsapp_number, email,
+              food_restriction, allergies, confirmation_attendance,
+              number_of_people, created_at
+       FROM registrations
+       WHERE id = $1`,
+      [id]
+    );
 
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Registration not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Get registration error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch registration'
+    });
+  }
+});
+
+module.exports = router;

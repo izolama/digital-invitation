@@ -87,11 +87,11 @@ const Layout = ({ children }) => {
     };
 
     // Audio event listeners
+    const toastDuration = config.data.audio?.toastDuration || 3000;
+
     const handlePlay = () => {
       setIsPlaying(true);
       setShowToast(true);
-      // Use default toast duration if not specified in config
-      const toastDuration = config.data?.audio?.toastDuration || 3000;
       setTimeout(() => setShowToast(false), toastDuration);
     };
 

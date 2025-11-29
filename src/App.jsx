@@ -106,6 +106,7 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        <Route path="/registration/:id" element={<RegistrationDetail />} />
         
         {/* Redirect /admin to /admin/login */}
         <Route path="/admin" element={<Navigate to="/admin/login" replace />} />

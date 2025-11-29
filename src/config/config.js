@@ -1,7 +1,7 @@
 const config = {
   data: {
     // Main invitation title that appears on the page
-    title: "Digital Invitation",
+    title: "Customer Gathering 2025 - Krakatau Baja Industri",
     // Opening message/description of the invitation
     description:
       "Kami mengundang Anda untuk turut merayakan momen istimewa ini.",
