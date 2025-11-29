@@ -64,10 +64,8 @@ router.post('/admin/login', async (req, res) => {
       console.log('Calling bcrypt.compare()...');
       console.log('Hash preview:', user.password_hash.substring(0, 20) + '...');
       
-      // Use Promise.resolve to ensure proper async handling
-      validPassword = await Promise.resolve(
-        bcrypt.compare(password, user.password_hash)
-      );
+      // Direct bcrypt.compare call (bcryptjs handles async properly)
+      validPassword = await bcrypt.compare(password, user.password_hash);
       
       const duration = Date.now() - startTime;
       console.log(`✅ Password verification completed in ${duration}ms`);

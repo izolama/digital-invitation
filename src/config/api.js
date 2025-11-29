@@ -7,13 +7,8 @@ const getApiBaseUrl = () => {
     return import.meta.env.VITE_API_BASE_URL;
   }
   
-  // In development, use IP address
-  if (import.meta.env.DEV) {
-    return 'http://192.168.101.100:5001';
-  }
-  
-  // Production: Use IP address
-  return 'http://192.168.101.100:5001';
+  // Always use HTTPS backend domain
+  return 'https://backend-digital-invitation.nahsbyte.my.id';
 };
 
 const API_BASE_URL = getApiBaseUrl();
