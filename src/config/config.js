@@ -1,19 +1,19 @@
 const config = {
   data: {
     // Main invitation title that appears on the page
-    title: "Pernikahan Fulan & Fulana",
+    title: "Digital Invitation",
     // Opening message/description of the invitation
     description:
-      "Kami akan menikah dan mengundang Anda untuk turut merayakan momen istimewa ini.", // Nanti ini dibikin random
-    // Groom's name
+      "Kami mengundang Anda untuk turut merayakan momen istimewa ini.",
+    // Event organizer/company name
     groomName: "Customer Gathering 2025",
-    // Bride's name
+    // Event theme/title
     brideName: "STEEL IN HARMONY",
-    // Groom's parents names
-    parentGroom: "Bapak Groom & Ibu Groom",
-    // Bride's parents names
-    parentBride: "Bapak Bride & Ibu Bride",
-    // Wedding date (format: YYYY-MM-DD)
+    // Event organizer details
+    parentGroom: "PT Krakatau Baja Industri",
+    // Additional event information
+    parentBride: "Event Organizer",
+    // Event date (format: YYYY-MM-DD)
     date: "2025-12-05",
     // Google Maps link for location (short clickable link)
     maps_url: "https://maps.app.goo.gl/KJHSDw5cBf6MKmU27",
@@ -25,7 +25,7 @@ const config = {
     time: "18:00 - 22:00 WIB",
     // Venue/building name
     location: "SHANGRI-LA HOTEL JAKARTA",
-    // Full address of the wedding venue
+    // Full address of the event venue
     address: "Jl. Jend. Sudirman No.1, Jakarta",
     // Image that appears when link is shared on social media
     ogImage: "/images/og-image.jpg",
@@ -35,25 +35,25 @@ const config = {
     agenda: [
       {
         // First event name
-        title: "Akad Nikah",
+        title: "Opening Ceremony",
         // Event date (format: YYYY-MM-DD)
-        date: "2024-12-24",
+        date: "2025-12-05",
         // Start time (format: HH:MM)
-        startTime: "16:16",
+        startTime: "18:00",
         // End time (format: HH:MM)
-        endTime: "17:30",
+        endTime: "19:00",
         // Event venue
-        location: "Grand Ballroom, Hotel Majesty",
+        location: "Grand Ballroom, Shangri-La Hotel",
         // Full address
         address: "Jl. Jend. Sudirman No.1, Jakarta",
       },
       {
         // Second event name
-        title: "Resepsi Nikah",
-        date: "2024-12-24",
-        startTime: "16:16",
-        endTime: "17:30",
-        location: "Grand Ballroom, Hotel Majesty",
+        title: "Main Event",
+        date: "2025-12-05",
+        startTime: "19:00",
+        endTime: "22:00",
+        location: "Grand Ballroom, Shangri-La Hotel",
         address: "Jl. Jend. Sudirman No.1, Jakarta",
       }
       // You can add more agenda items with the same format
@@ -71,7 +71,7 @@ const config = {
       loop: true
     },
 
-    // List of bank accounts for digital envelope/gifts
+    // List of bank accounts (optional, for donations or payments)
     banks: [
       {
         // Bank name
@@ -79,12 +79,12 @@ const config = {
         // Account number
         accountNumber: "1234567890",
         // Account holder name (all uppercase)
-        accountName: "FULAN",
+        accountName: "EVENT ORGANIZER",
       },
       {
         bank: "Bank Mandiri",
         accountNumber: "0987654321",
-        accountName: "FULANA",
+        accountName: "EVENT ORGANIZER",
       }
       // You can add more banks with the same format
     ]
