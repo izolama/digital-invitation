@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import Confetti from 'react-confetti';
-import QRCode from 'react-qr-code';
 import {
     User,
     Building2,
@@ -19,7 +18,7 @@ import config from '@/config/config';
 import { API_ENDPOINTS } from '@/config/api';
 import BottomOrnaments from '@/components/BottomOrnaments';
 import QRCode from 'qrcode';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 export default function Wishes() {
     const [showConfetti, setShowConfetti] = useState(false);
