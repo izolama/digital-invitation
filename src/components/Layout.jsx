@@ -163,18 +163,18 @@ const Layout = ({ children }) => {
         <motion.button
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={toggleMusic}
-          className="fixed bottom-[27px] right-4 z-50 bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-lg border border-primary/20"
+          className="fixed top-24 sm:top-[110px] right-3 z-40 bg-white/90 backdrop-blur-sm w-11 h-11 flex items-center justify-center rounded-full shadow-lg border border-primary/20"
         >
           {isPlaying ? (
-            <div className="relative">
-              <PauseCircle className="w-6 h-6 text-primary" />
+            <div className="relative flex items-center justify-center">
+              <PauseCircle className="w-5 h-5 text-primary" />
               <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse" />
             </div>
           ) : (
-            <PlayCircle className="w-6 h-6 text-primary" />
+            <PlayCircle className="w-5 h-5 text-primary" />
           )}
         </motion.button>
 
