@@ -45,7 +45,7 @@ services:
       - DB_NAME=digital_invitation
       - JWT_SECRET=${JWT_SECRET:-change-this-in-production-use-at-least-32-characters-minimum}
       - JWT_EXPIRES_IN=24h
-      - CORS_ORIGIN=https://digital-invitation.nahsbyte.my.id,http://digital-invitation.nahsbyte.my.id,https://backend-digital-invitation.nahsbyte.my.id,http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000,http://192.168.101.100:5001,http://192.168.101.100:5173,http://157.10.161.207:5001,http://157.10.161.207:5173,https://customergatheringkbi2025.nahsbyte.my.id/
+      - CORS_ORIGIN=https://digital-invitation.nahsbyte.my.id,https://customergatheringkbi2025.nahsbyte.my.id,http://digital-invitation.nahsbyte.my.id,https://backend-digital-invitation.nahsbyte.my.id,http://localhost:5173,http://127.0.0.1:5173,http://192.168.101.100:5001,http://192.168.101.100:5173,http://157.10.161.207:5001,http://157.10.161.207:5173
       - ENABLE_RATE_LIMIT=false
     networks:
       - shared-network
