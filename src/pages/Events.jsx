@@ -32,28 +32,41 @@ export default function Events() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.8, delay: 0.1 }}
-                            className="bg-white/80 rounded-3xl shadow-lg border border-primary/10 px-5 py-5 sm:px-7 sm:py-7 space-y-3 text-left text-sm sm:text-base"
+                            className="bg-white/80 rounded-3xl shadow-lg border border-primary/10 px-5 py-5 sm:px-7 sm:py-7 text-left text-[11px] sm:text-xs"
                         >
-                            <div className="flex gap-3 sm:gap-6 leading-relaxed">
-                                <span className="w-28 sm:w-36 font-semibold">Hari/Tanggal</span>
-                                <span className="flex-1">: {formatEventDate(config.data.date, 'full')}</span>
-                            </div>
-                            <div className="flex gap-3 sm:gap-6 leading-relaxed">
-                                <span className="w-28 sm:w-36 font-semibold">Pukul</span>
-                                <span className="flex-1">: {config.data.time}</span>
-                            </div>
-                            <div className="flex gap-3 sm:gap-6 leading-relaxed">
-                                <span className="w-28 sm:w-36 font-semibold">Tempat</span>
-                                <span className="flex-1">: {config.data.location}</span>
-                            </div>
-                            <div className="flex gap-3 sm:gap-6 leading-relaxed items-start">
-                                <span className="w-28 sm:w-36 font-semibold">Rangkaian Acara</span>
-                                <div className="flex-1">
-                                    <ul className="list-disc pl-5 space-y-1">
-                                        <li>Appreciation Night</li>
-                                        <li>Gala Dinner</li>
-                                        <li>Signing Agreement &amp; Awarding Ceremony</li>
-                                    </ul>
+                            <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[120px_1fr] gap-x-2 sm:gap-x-4 gap-y-2 leading-relaxed text-secondary">
+                                <div className="font-semibold whitespace-nowrap">Hari/Tanggal</div>
+                                <div className="flex items-center min-w-0">
+                                    <span className="mr-2">:</span>
+                                    <span className="whitespace-nowrap truncate">{formatEventDate(config.data.date, 'full')}</span>
+                                </div>
+
+                                <div className="font-semibold whitespace-nowrap">Pukul</div>
+                                <div className="flex items-center min-w-0">
+                                    <span className="mr-2">:</span>
+                                    <span className="whitespace-nowrap">{config.data.time}</span>
+                                </div>
+
+                                <div className="font-semibold whitespace-nowrap">Tempat</div>
+                                <div className="flex items-center min-w-0">
+                                    <span className="mr-2">:</span>
+                                    <span className="whitespace-nowrap truncate">{config.data.location}</span>
+                                </div>
+
+                                <div className="font-semibold whitespace-nowrap">Rangkaian Acara</div>
+                                <div className="flex flex-col gap-1">
+                                    <div className="flex items-start gap-2">
+                                        <span className="mt-[2px]">•</span>
+                                        <span className="whitespace-normal">Appreciation Night</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                        <span className="mt-[2px]">•</span>
+                                        <span className="whitespace-normal">Gala Dinner</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                        <span className="mt-[2px]">•</span>
+                                        <span className="whitespace-normal">Signing Agreement &amp; Awarding Ceremony</span>
+                                    </div>
                                 </div>
                             </div>
                         </motion.div>
