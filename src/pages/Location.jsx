@@ -6,7 +6,7 @@ import BottomOrnaments from '@/components/BottomOrnaments';
 
 const timeline = [
     { title: 'Registration', time: '18:00 WIB' },
-    { title: 'Opening', time: '19:00 WIB' },
+    { title: 'Opening & Greeting', time: '19:00 WIB' },
     { title: 'Dinner', time: '20:00 WIB' },
     { title: 'Awarding', time: '20:30 WIB' },
     { title: 'Closing', time: '22:00 WIB' },
