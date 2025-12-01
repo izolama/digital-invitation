@@ -25,6 +25,8 @@ const config = {
     time: "18:00 - 22:00 WIB",
     // Venue/building name
     location: "SHANGRI-LA HOTEL JAKARTA",
+    location_event: "Shang Ri La Hotel Jakarta",
+    location2: "Jl Jenderal Sudirman No.Kav 1, Jakarta Pusat",
     // Full address of the event venue
     address: "Jl. Jend. Sudirman No.1, Jakarta",
     // Image that appears when link is shared on social media

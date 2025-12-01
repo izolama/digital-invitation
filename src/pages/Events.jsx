@@ -34,7 +34,7 @@ export default function Events() {
                             transition={{ duration: 0.8, delay: 0.1 }}
                             className="bg-white/80 rounded-3xl shadow-lg border border-primary/10 px-5 py-5 sm:px-7 sm:py-7 text-left text-[11px] sm:text-xs"
                         >
-                            <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[120px_1fr] gap-x-2 sm:gap-x-4 gap-y-2 leading-relaxed text-secondary">
+                            <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[140px_1fr] gap-x-2 sm:gap-x-4 gap-y-2 leading-relaxed text-secondary">
                                 <div className="font-semibold whitespace-nowrap">Hari/Tanggal</div>
                                 <div className="flex items-center min-w-0">
                                     <span className="mr-2">:</span>
@@ -48,9 +48,12 @@ export default function Events() {
                                 </div>
 
                                 <div className="font-semibold whitespace-nowrap">Tempat</div>
-                                <div className="flex items-center min-w-0">
-                                    <span className="mr-2">:</span>
-                                    <span className="whitespace-nowrap truncate">{config.data.location}</span>
+                                <div className="flex items-start min-w-0">
+                                    <span className="mr-2 mt-[2px]">:</span>
+                                    <div className="flex flex-col min-w-0">
+                                        <span className="whitespace-nowrap truncate">{config.data.location_event}</span>
+                                        <span className="whitespace-normal text-left">{config.data.location2}</span>
+                                    </div>
                                 </div>
 
                                 <div className="font-semibold whitespace-nowrap">Rangkaian Acara</div>
@@ -65,8 +68,13 @@ export default function Events() {
                                     </div>
                                     <div className="flex items-start gap-2">
                                         <span className="mt-[2px]">•</span>
-                                        <span className="whitespace-normal">Signing Agreement &amp; Awarding Ceremony</span>
+                                        <span className="whitespace-normal">Awarding Ceremony</span>
                                     </div>
+                                </div>
+                                <div className="font-semibold whitespace-nowrap">Tema Busana</div>
+                                <div className="flex items-center min-w-0">
+                                    <span className="mr-2">:</span>
+                                    <span className="whitespace-nowrap">Nuansa Nusantara</span>
                                 </div>
                             </div>
                         </motion.div>
